@@ -1,3 +1,3 @@
-# [sunnah.com](sunnah.com) API
+# [sunnah.com](https://sunnah.com) API
 
 currently in development!
