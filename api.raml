@@ -1,0 +1,461 @@
+#%RAML 1.0
+title: HadithDB
+version: v0.1
+protocols: HTTP
+baseUri: http://api.sunnah.com/{version}
+# Version 0.1 of the API is read-only, hence
+# the only defined method is GET, aligning with
+# the CRUD method Retrieve. We'll be rolling
+# out a read/write API down the line but in
+# order to vend more immediate access to our
+# API we've moved forward with this approach.
+# A major bonus to this approach is that we
+# can continue to leverage the http-only server
+# in use (should move to https) and we won't
+# have to worry about authN/authZ just yet
+types:
+  EnglishHadith:
+    type: object
+    properties:
+      //:
+        required: true
+      englishId:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      arabicId:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      collection:
+        type: string
+        minLength: 2
+        maxLength: 50
+      volumeNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      bookNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      bookName:
+        type: string
+        minLength: 2
+        maxLength: 100
+      hadithNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      hadithText:
+        type: string
+        minLength: 2
+      bookId:
+        type: number
+        format: long
+        minimum: 0.0
+      grades:
+        type: array
+        items: string
+        minItems: 0
+        uniqueItems: true
+      comments:
+        type: string
+        minLength: 2
+      ourHadithNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      lastUpdated:
+        type: datetime
+  ArabicHadith:
+    type: object
+    properties:
+      //:
+        required: true
+      englishId:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      arabicId:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      collection:
+        type: string
+        minLength: 2
+        maxLength: 50
+      volumeNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      bookNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      bookName:
+        type: string
+        minLength: 2
+        maxLength: 100
+      babNumber:
+        type: number
+        format: long
+        minimum: 0.0
+      babName:
+        type: string
+        minLength: 2
+        maxLength: 100
+      hadithNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      hadithText:
+        type: string
+        minLength: 2
+      bookId:
+        type: number
+        format: long
+        minimum: 0.0
+      grades:
+        type: array
+        items: string
+        minItems: 0
+        uniqueItems: true
+      comments:
+        type: string
+        minLength: 2
+      ourHadithNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      lastUpdated:
+        type: datetime
+      annotations:
+        type: string
+  Book:
+    type: object
+    properties:
+      //:
+        required: true
+      collection:
+        type: string
+        minLength: 2
+        maxLength: 50
+      englishBookId:
+        type: number
+        format: long
+        minimum: 0.0
+      englishBookNumber:
+        type: integer
+        minimum: 0
+        maximum: 9999999999999
+      englishBookName:
+        type: string
+        minLength: 2
+        maxLength: 100
+      englishBookIntro:
+        type: string
+      arabicBookId:
+        type: number
+        format: long
+        minimum: 0.0
+      arabicBookNumber:
+        type: integer
+        minimum: 0
+        maximum: 9999999999999
+      arabicBookName:
+        type: string
+        minLength: 2
+        maxLength: 200
+      arabicBookIntro:
+        type: string
+      indonesianBookId:
+        type: number
+        format: long
+        minimum: 0.0
+      indonesianBookNumber:
+        type: integer
+        minimum: 0
+        maximum: 9999999999999
+      indonesianBookName:
+        type: string
+        minLength: 2
+        maxLength: 500
+      urduBookId:
+        type: number
+        format: long
+        minimum: 0.0
+      urduBookNumber:
+        type: integer
+        minimum: 0
+        maximum: 9999999999999
+      urduBookName:
+        type: string
+        minLength: 2
+        maxLength: 200
+      ourBookId:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      firstHadithNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      lastHadithNumber:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      totalHadithContained:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      status:
+        enum: [ complete, incomplete ]
+      lastUpdated:
+        type: datetime
+      lastHadithUpdated:
+        type: datetime #questionable, should likely be an int
+  Collection:
+    type: object
+    properties:
+      //:
+        required: true
+      name:
+        type: string
+        minLength: 5
+        maxLength: 100
+      collectionId:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      type:
+        enum: [ collection, selection ]
+      englishTitle:
+        type: string
+        minLength: 2
+        maxLength: 200
+      arabicTitle:
+        type: string
+        minLength: 2
+        maxLength: 400
+      hasVolumes:
+        type: boolean
+      hasBooks:
+        type: boolean
+      hasChapters:
+        type: boolean
+      numHadith:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      totalHadith:
+        type: integer
+        minimum: 0
+        maximum: 99999999999
+      englishGrade:
+        type: string
+        maxLength: 100
+        minLength: 0
+      arabicGrade:
+        type: string
+        maxLength: 200
+        minLength: 2
+      annotation:
+        type: string
+        maxLength: 300
+      shortIntro:
+        type: string
+        minLength: 2
+      about:
+        type: string
+        minLength: 2
+      status:
+        enum: [ complete, incomplete ]
+      numberingInfoDesc:
+        type: string
+        minLength: 2
+  Hadiths:
+    type: (ArabicHadith | EnglishHadith)[]
+    minItems: 0
+    uniqueItems: true
+  Books:
+    type: Book[]
+    minItems: 0
+    uniqueItems: true
+  Collections:
+    type: Collection[]
+    minItems: 0
+    uniqueItems: true
+  SingleItemReturn:
+    type: object
+    properties:
+      status:
+        required: true
+        enum: [success, failure, error]
+      message:
+        required: true
+        type: string
+      content:
+        required: true
+        type: (EnglishHadith | ArabicHadith | Book | Collection)
+  MultiItemReturn:
+    type: object
+    properties:
+      status:
+        required: true
+        enum: [success, failure, error]
+      message:
+        required: true
+        type: string
+      startToken:
+        required: true
+        type: string
+      content:
+        required: true
+        type: (Hadiths | Books | Collections)
+/hadiths:
+  description: Interact with all hadiths
+  get:
+    description: Get a list of hadiths
+    queryParameters:
+      startToken:
+        description: Specify the pagination continuation point if provided
+        type: string
+        required: false
+        example: j3kaOEqj095
+      q:
+        description: Substring by which to search for Hadiths
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: MultiItemReturn
+  /{hadithNumber}:
+    description: Interact with a hadith
+    get:
+      description: Retrieve a hadith
+      responses:
+        200:
+          body:
+            application/json:
+              type: SingleItemReturn
+/books:
+  description: Interact with all books
+  get:
+    description: Retrieve a list of all books
+    queryParameters:
+      startToken:
+        description: Specify the pagination continuation point if provided
+        type: string
+        required: false
+        example: j3kaOEqj095
+      q:
+        description: Substring by which to search for books
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: MultiItemReturn
+  /{bookNumber}:
+    description: Interact with a specific book
+    get:
+      description: Retrieve a specific book
+      responses:
+        200:
+          body:
+            application/json:
+              type: SingleItemReturn
+/collections:
+  description: Interact with all collections
+  get:
+    description: Retrieve a list of collections
+    queryParameters:
+      startToken:
+        description: Specify the pagination continuation point if provided
+        type: string
+        required: false
+        example: j3kaOEqj095
+      q:
+        description: Substring by which to search for collections
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: MultiItemReturn
+  /{collectionName}:
+    description: Interact with a collection
+    get:
+      description: Retrieve a collection
+      responses:
+        200:
+          body:
+            application/json:
+              type: SingleItemReturn
+    /books:
+      description: Interact with books in a collection
+      get:
+        description: Retrieve a list of books within a collection
+        queryParameters:
+          startToken:
+            description: Specify the pagination continuation point if provided
+            type: string
+            required: false
+            example: j3kaOEqj095
+          q:
+            description: Substring by which to search for books
+            type: string
+            required: false
+        responses:
+          200:
+            body:
+              application/json:
+                type: MultiItemReturn
+      /{bookNumber}:
+        description: Interact with a specific book in a collection
+        get:
+          description: Retrieve a book within a collection
+          responses:
+            200:
+              body:
+                application/json:
+                  type: SingleItemReturn
+        /hadiths:
+          description: Interact with hadiths in a book and collection
+          get:
+            description: Retrieve a list of hadiths within a book and collection
+            queryParameters:
+              startToken:
+                description: Specify the pagination continuation point if provided
+                type: string
+                required: false
+                example: j3kaOEqj095
+              q:
+                description: Substring by which to search for hadiths
+                type: string
+                required: false
+            responses:
+              200:
+                body:
+                  application/json:
+                    type: MultiItemReturn
+          /{hadithNumber}:
+            description: Interact with a hadith in a book and collection
+            get:
+              description: Retrieve a hadith within a book and collection
+              queryParameters:
+                startToken:
+                  description: Specify the pagination continuation point if provided
+                  type: string
+                  required: false
+                  example: j3kaOEqj095
+              responses:
+                200:
+                  body:
+                    application/json:
+                      type: SingleItemReturn
