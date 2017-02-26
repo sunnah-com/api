@@ -1,7 +1,4 @@
-/.bundle
-/log/*
-/tmp/*
-/db/*.sql
-!/log/.keep
-!/tmp/.keep
-.byebug_history
+.env/
+.coverage
+*.pyc
+*/__pycache__

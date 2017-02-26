@@ -1,0 +1,17 @@
+botocore==1.5.15
+chalice==0.5.1
+click==6.2
+configparser==3.5.0
+coverage==4.3.4
+docutils==0.13.1
+enum34==1.1.6
+flake8==3.3.0
+jmespath==0.9.1
+kerberos==1.2.5
+mccabe==0.6.1
+py==1.4.32
+python-dateutil==2.6.0
+simplejson==3.10.0
+typing==3.5.2.2
+urllib2-kerberos==0.1.6
+virtualenv==15.1.0

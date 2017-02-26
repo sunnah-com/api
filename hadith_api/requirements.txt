@@ -1,0 +1,5 @@
+packaging==16.8
+peewee==2.8.5
+PyMySQL==0.7.10
+pyparsing==2.1.10
+six==1.10.0
