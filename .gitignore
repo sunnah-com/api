@@ -2,3 +2,4 @@
 .coverage
 *.pyc
 */__pycache__
+db/*.sql
