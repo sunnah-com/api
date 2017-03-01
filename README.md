@@ -1,5 +1,5 @@
 # Overview
-HadithAPI leverages a serverless architecture. 
+HadithAPI leverages a serverless architecture.
 
 ## Package Structure
 ```
@@ -38,20 +38,67 @@ source .env/bin/activate
 
 When finished, remember to `deactivate` the virtualenv.
 
+# Development
+Assuming you've completed the setup, simply run:
+```bash
+make run
+```
+
+BUT WAIT! Before you can use the API locally, you need to seed the database. The DB is not public, so you'll need to contact a collaborator for access. **MySQL server needs to be running locally in order for this step to work**.
+
+To get started run:
+```bash
+mysql -u root -p < setup.sql
+```
+When prompted for the password, just hit <kbd>enter</kbd>.
+
+This completes the basic setup - and you should be able to start the application on `localhost:8000`.
+
 # Testing
-> `make run` 
+> `make run`
 
-run an AWS APIGateway-esque instance of the application. This starts a server on port 8000 that's responsive to queries (would recommend using `curl`). 
+run an AWS APIGateway-esque instance of the application. This starts a server on port 8000 that's responsive to queries (would recommend using `curl`).
 
-> `make lint` 
+> `make lint`
 
 Run Flake8 on the code under hadith_api/
 
-> `make test` 
+> `make test`
 
 Run pytest unit tests and print coverage. It should Ideally be expanded to include integration tests
 
-# TODO
+## Routes
+### `GET /hadith`
+Retrieves list of all hadith
+
+### `GET /hadith/{hadithNumber}`
+Retrieves list of all hadith by number
+
+### `GET /books`
+Retrieves list of all books
+
+### `GET /books/{bookNumber}`
+Retrieves book by id
+
+### `GET /collections`
+Retrieves list of all collections
+
+### `GET /collections/{collectionName}`
+Retrieves a specific collection
+
+### `GET /collections/{collectionName}/books`
+Retrieves list of books in a specific collection
+
+### `GET /collections/{collectionName}/books/{bookNumber}`
+Retrieves book within specific collection
+
+### `GET /collections/{collectionName}/books/{bookNumber}/hadiths`
+Retrieves ahadith for specific book and collection
+
+### `GET /collections/{collectionName}/books/{bookNumber}/hadiths/{hadithNumber}`
+Retrieves specific hadith for specific book and collection
+
+### TODO
 
 1. Enforce RAML spec
 2. Bootstrap test run to local mysql instance
