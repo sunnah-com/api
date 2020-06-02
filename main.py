@@ -39,4 +39,6 @@ def collections():
 def collection(hadith):
     return {'collection': hadith['collection'], 'collection_id': hadith['collection_id']}
 
-app.run()
+app.run(
+    host='0.0.0.0'
+)

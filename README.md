@@ -1,10 +1,16 @@
 # Overview
-HadithAPI using Python Flask.
+
+**❌ THIS IS A WORK IN PROGRESS!** The API is not currently available for consumption. Development work is ongoing.
+
+This project will eventually allow consuming a Hadith API built on python's flask framework.
+
+python 3+ is required to run the project.
 
 ## Package Structure
 ```
 ├── README.md
 ├── main.py
+├── Dockerfile
 ```
 
 # Getting started
