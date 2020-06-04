@@ -1,7 +1,7 @@
 import flask
 from flask import jsonify
 
-app = flask.Flask(__name__)
+app = flask.Flask(__name__) 
 app.config["DEBUG"] = True
 
 hadiths = [
@@ -28,6 +28,11 @@ def api_collection(collection_id):
     result = [collection for collection in collections() if collection['collection_id'] == collection_id ]
     return jsonify(result)
 
+@app.route('/v1/collections/<int:collection_id>/books', methods=['GET'])
+def api_books(collection_id):
+    result = [book for book in books() if book['collection_id'] == collection_id]
+    return jsonify(result)
+
 @app.route('/v1/collections/<int:collection_id>/books/<int:book_id>/hadiths', methods=['GET'])
 def api_hadiths(collection_id, book_id):
     result = [hadith for hadith in hadiths if hadith['collection_id'] == collection_id and hadith['book_id'] == book_id]
@@ -38,6 +43,16 @@ def collections():
 
 def collection(hadith):
     return {'collection': hadith['collection'], 'collection_id': hadith['collection_id']}
+
+def books():
+    return [book(hadith) for hadith in hadiths]
+
+def book(hadith):
+    return {
+        'book': hadith['book'],
+        'book_id': hadith['book_id'],
+        'collection_id': hadith['collection_id']
+    }
 
 app.run(
     host='0.0.0.0'

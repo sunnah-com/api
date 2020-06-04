@@ -7,6 +7,7 @@ This project will eventually allow consuming a Hadith API built on python's flas
 python 3+ is required to run the project.
 
 ## Package Structure
+
 ```
 ├── README.md
 ├── main.py
@@ -24,18 +25,20 @@ pip install -r requirements.txt
 python main.py
 ```
 
-# Build 
+# Build
 
 Build using:
 
 ```bash
 $ docker build -t sunnah-com/api .
 ```
+
 Run with:
 
 ```bash
 $ docker run --init -p 5000:5000 sunnah-com/api
 ```
+
 You can then visit [localhost:5000](http://localhost:5000) to verify that it's running on your machine. Or, alternatively:
 
 ```bash
@@ -43,13 +46,17 @@ $ curl http://localhost:5000
 ```
 
 ## Routes
-### `GET /collections`
+
+### `GET /v1/collections`
 Retrieves list of all collections
 
-### `GET /collections/{collection_id}`
+### `GET /v1/collections/{collection_id}`
 Retrieves a single collection by id
 
-### `GET /collections/{collection_id}/books/{book_id}/hadiths`
+### `GET /v1/collections/{collection_id}/books`
+Retrieves list of all books in a given collection
+
+### `GET /v1/collections/{collection_id}/books/{book_id}/hadiths`
 Retrieves list of all hadith in a given collection and book
 
 ### TODO
