@@ -1,6 +1,14 @@
 FROM python:3.6
+
 WORKDIR /home/app/api
-ADD . $WORKDIR
+
+COPY requirements.txt $WORKDIR
+
 RUN pip install -r requirements.txt
+
+COPY . $WORKDIR
+
+ENV PYTHONUNBUFFERED 1
+
 EXPOSE 5000
-CMD python3 -u main.py
+CMD python main.py
