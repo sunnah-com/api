@@ -3,3 +3,6 @@
 *.pyc
 */__pycache__
 db/*.sql
+
+credentials.database
+.vscode/*
