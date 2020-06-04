@@ -38,7 +38,7 @@ $ docker build -t sunnah-com/api .
 Run with:
 
 ```bash
-$ docker run --init -p 5000:5000 sunnah-com/api
+$ docker run --init -d -p 5000:5000 sunnah-com/api
 ```
 
 You can then visit [localhost:5000](http://localhost:5000) to verify that it's running on your machine. Or, alternatively:
