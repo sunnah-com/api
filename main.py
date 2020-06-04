@@ -1,8 +1,10 @@
+from database_credentials import get_db_credentials
 import flask
 from flask import jsonify
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+db_creds = get_db_credentials()
 
 hadiths = [
     {'id': 1,

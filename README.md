@@ -21,6 +21,8 @@ Please follow the instructions below
 git clone REPO
 cd REPO
 pip install -r requirements.txt
+mv credentials.database.sample credentials.database
+<edit the credentials as needed>
 python main.py
 ```
 
