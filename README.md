@@ -16,32 +16,30 @@ python 3+ is required to run the project.
 
 # Getting started
 
-Please follow the instructions below
+Please follow the instructions below.
 
-```
+First create a local `.env.local` configuration file and update values as needed.
+A sample file is provided at `.env.local.sample`.
+
+Run manually:
+```bash
 git clone REPO
 cd REPO
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
-mv credentials.database.sample credentials.database
-<edit the credentials as needed>
-python main.py
+export FLASK_ENV=development FLASK_APP=main.py
+flask run --host=0.0.0.0
 ```
 
-# Build
-
-Build using:
+Or alternatively use `docker-compose` which will give a full environment with a MySQL instance loaded with a sample dataset:
 
 ```bash
-$ docker build -t sunnah-com/api .
+docker-compose up
 ```
 
-Run with:
-
-```bash
-$ docker run --init -p 5000:5000 sunnah-com/api
-```
-Use the `-d` option ot run in detached mode.
-Use `--network="host"` on Linux to have MySQL on the local host be accessible within the container as if it were on localhost.
+* Use `--build` option to re-build.
+* Use the `-d` option to run in detached mode.
 
 You can then visit [localhost:5000](http://localhost:5000) to verify that it's running on your machine. Or, alternatively:
 
