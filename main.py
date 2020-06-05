@@ -1,12 +1,8 @@
-from database_credentials import get_db_credentials
 from flask import Flask, jsonify
 from models import db, HadithCollection
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
-db_creds = get_db_credentials()
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}'.format(**db_creds)
+app.config.from_object('config.Config')
 db.init_app(app)
 
 hadiths = [

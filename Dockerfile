@@ -1,14 +1,11 @@
-FROM python:3.6
-
-WORKDIR /home/app/api
-
-COPY requirements.txt $WORKDIR
-
-RUN pip install -r requirements.txt
-
-COPY . $WORKDIR
+FROM python:3.8-slim
 
 ENV PYTHONUNBUFFERED 1
 
-EXPOSE 5000
-CMD python main.py
+RUN mkdir /code
+WORKDIR /code
+COPY requirements.txt /code/
+
+RUN pip install -r requirements.txt
+
+COPY . /code/

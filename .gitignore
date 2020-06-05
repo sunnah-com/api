@@ -1,8 +1,9 @@
-.env/
-.coverage
-*.pyc
-*/__pycache__
-db/*.sql
+*.py[cod]
+__pycache__
+.DS_Store
 
-credentials.database
-.vscode/*
+.vscode/
+.coverage
+venv
+
+.env.local

@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7.22
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+    env_file:
+      - .env.local
+  web:
+    build: .
+    command: flask run --host=0.0.0.0
+    volumes:
+      - .:/code
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env.local
