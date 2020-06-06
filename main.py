@@ -1,9 +1,9 @@
 from flask import Flask, jsonify
-from models import db, HadithCollection
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
-db.init_app(app)
+
+from models import db, HadithCollection
 
 hadiths = [
     {'id': 1,
