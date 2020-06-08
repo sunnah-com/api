@@ -58,10 +58,11 @@ Retrieves a single collection by id
 ### `GET /v1/collections/{collection_id}/books`
 Retrieves list of all books in a given collection
 
+### `GET /v1/collections/{collection_id}/books/{book_id}`
+Retrieves information about a book in a given collection
+
+### `GET /v1/collections/{collection_id}/books/{book_id}/chapters`
+Retrieves list of all chapters in a given collection and book
+
 ### `GET /v1/collections/{collection_id}/books/{book_id}/hadiths`
 Retrieves list of all hadith in a given collection and book
-
-### TODO
-
-1. Implement all routes
-2. Get data from database instead

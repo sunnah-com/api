@@ -56,8 +56,13 @@ def api_collection_books(name):
     results = [x.serialize() for x in queryset]
     return jsonify(results)
 
+@app.route('/v1/collections/<string:name>/books/<int:book_id>', methods=['GET'])
+def api_collection_book(name, book_id):
+    book = Book.query.filter_by(collection=name).filter_by(ourBookID=book_id).first_or_404();
+    return jsonify(book.serialize())
+
 @app.route('/v1/collections/<string:collection_name>/books/<int:book_id>/hadiths', methods=['GET'])
-def api_hadiths(collection_name, book_id):
+def api_collection_book_hadiths(collection_name, book_id):
     queryset = Hadith.query.filter_by(collection=collection_name, bookID=book_id).all()
     results = [x.serialize() for x in queryset]
     return jsonify(results)
