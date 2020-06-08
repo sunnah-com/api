@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_swagger import swagger
+from sqlalchemy import func
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
@@ -19,7 +20,7 @@ def spec():
 
 @app.route('/v1/collections', methods=['GET'])
 def api_collections():
-    queryset = HadithCollection.query.all()
+    queryset = HadithCollection.query.order_by(HadithCollection.collectionID).all()
     results = [x.serialize() for x in queryset]
     return jsonify(results)
 
@@ -52,7 +53,7 @@ def api_collection(name):
 
 @app.route('/v1/collections/<string:name>/books', methods=['GET'])
 def api_collection_books(name):
-    queryset = Book.query.filter_by(collection=name).all()
+    queryset = Book.query.filter_by(collection=name).order_by(func.abs(Book.ourBookID)).all()
     results = [x.serialize() for x in queryset]
     return jsonify(results)
 
@@ -63,7 +64,7 @@ def api_collection_book(name, book_id):
 
 @app.route('/v1/collections/<string:collection_name>/books/<int:book_id>/hadiths', methods=['GET'])
 def api_collection_book_hadiths(collection_name, book_id):
-    queryset = Hadith.query.filter_by(collection=collection_name, bookID=book_id).all()
+    queryset = Hadith.query.filter_by(collection=collection_name, bookID=book_id).order_by(Hadith.englishURN).all()
     results = [x.serialize() for x in queryset]
     return jsonify(results)
 
