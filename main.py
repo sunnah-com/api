@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+import functools
+from flask import Flask, jsonify, request
 from flask_swagger import swagger
 from sqlalchemy import func
 
@@ -6,6 +7,23 @@ app = Flask(__name__)
 app.config.from_object('config.Config')
 
 from models import db, HadithCollection, Book, Hadith
+
+def paginate_results(f):
+    @functools.wraps(f)
+    def decorated_function(*args, **kwargs):
+        limit = int(request.args.get('limit', 50))
+        page = int(request.args.get('page', 1))
+
+        queryset = f(*args, **kwargs).paginate(page=page, per_page=limit, max_per_page=100)
+        result = {
+            'data': [x.serialize() for x in queryset.items],
+            'total': queryset.total,
+            'limit': queryset.per_page,
+            'previous': queryset.prev_num,
+            'next': queryset.next_num
+        }
+        return jsonify(result)
+    return decorated_function
 
 @app.route('/', methods=['GET'])
 def home():
@@ -19,10 +37,9 @@ def spec():
     return jsonify(swag)
 
 @app.route('/v1/collections', methods=['GET'])
+@paginate_results
 def api_collections():
-    queryset = HadithCollection.query.order_by(HadithCollection.collectionID).all()
-    results = [x.serialize() for x in queryset]
-    return jsonify(results)
+    return HadithCollection.query.order_by(HadithCollection.collectionID)
 
 @app.route('/v1/collections/<string:name>', methods=['GET'])
 def api_collection(name):
@@ -52,10 +69,9 @@ def api_collection(name):
     return jsonify(collection.serialize())
 
 @app.route('/v1/collections/<string:name>/books', methods=['GET'])
+@paginate_results
 def api_collection_books(name):
-    queryset = Book.query.filter_by(collection=name).order_by(func.abs(Book.ourBookID)).all()
-    results = [x.serialize() for x in queryset]
-    return jsonify(results)
+    return Book.query.filter_by(collection=name).order_by(func.abs(Book.ourBookID))
 
 @app.route('/v1/collections/<string:name>/books/<int:book_id>', methods=['GET'])
 def api_collection_book(name, book_id):
@@ -63,10 +79,9 @@ def api_collection_book(name, book_id):
     return jsonify(book.serialize())
 
 @app.route('/v1/collections/<string:collection_name>/books/<int:book_id>/hadiths', methods=['GET'])
+@paginate_results
 def api_collection_book_hadiths(collection_name, book_id):
-    queryset = Hadith.query.filter_by(collection=collection_name, bookID=book_id).order_by(Hadith.englishURN).all()
-    results = [x.serialize() for x in queryset]
-    return jsonify(results)
+    return Hadith.query.filter_by(collection=collection_name, bookID=book_id).order_by(Hadith.englishURN)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
