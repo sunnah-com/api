@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from main import app
+from text_transform import cleanup_text, cleanup_en_text
 
 db = SQLAlchemy(app)
 db.reflect()
@@ -42,10 +43,10 @@ class Hadith(db.Model):
             'bab_number': str(self.babNumber),
             'hadith_number': self.hadithNumber,
             'bab_name_en': self.englishBabName,
-            'text_en': self.englishText,
+            'text_en': cleanup_en_text(self.englishText),
             'urn_ar': self.arabicURN,
             'bab_name_ar': self.arabicBabName,
-            'text_ar': self.arabicText,
+            'text_ar': cleanup_text(self.arabicText),
             'grade_ar': self.arabicgrade1,
             'grade_en': self.englishgrade1,
         }
