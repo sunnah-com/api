@@ -17,7 +17,7 @@ class HadithCollection(db.Model):
             'title_en': self.englishTitle,
             'title_ar': self.arabicTitle,
             'total_hadith': self.totalhadith,
-            'numhadith': self.numhadith,
+            'total_available_hadith': self.numhadith,
         }
 
 class Book(db.Model):
