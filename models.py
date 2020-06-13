@@ -28,9 +28,9 @@ class Book(db.Model):
             'book_id': self.ourBookID,
             'name_en': self.englishBookName,
             'name_ar': self.arabicBookName,
-            'first_hadith_number': self.firstNumber,
-            'last_hadith_number': self.lastNumber,
-            'total_hadith_number': self.totalNumber
+            'hadith_start_number': self.firstNumber,
+            'hadith_end_number': self.lastNumber,
+            'number_of_hadith': self.totalNumber
         }
 
 class Hadith(db.Model):
