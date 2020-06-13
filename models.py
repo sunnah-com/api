@@ -11,13 +11,13 @@ class HadithCollection(db.Model):
     def serialize(self):
         return {
             'name': self.name,
-            'has_books': self.hasbooks,
+            'short_intro': self.shortintro,
+            'has_books': self.hasbooks == "yes",
+            'has_chapters': self.haschapters == "yes",
             'title_en': self.englishTitle,
             'title_ar': self.arabicTitle,
-            'num_hadith': self.numhadith,
             'total_hadith': self.totalhadith,
-            'has_chapters': self.haschapters,
-            'short_intro': self.shortintro,
+            'numhadith': self.numhadith,
         }
 
 class Book(db.Model):
@@ -26,11 +26,11 @@ class Book(db.Model):
     def serialize(self):
         return {
             'book_id': self.ourBookID,
-            'book_name_en': self.englishBookName,
-            'book_name_ar': self.arabicBookName,
-            'first_number': self.firstNumber,
-            'last_number': self.lastNumber,
-            'total_number': self.totalNumber
+            'name_en': self.englishBookName,
+            'name_ar': self.arabicBookName,
+            'first_hadith_number': self.firstNumber,
+            'last_hadith_number': self.lastNumber,
+            'total_hadith_number': self.totalNumber
         }
 
 class Hadith(db.Model):
@@ -41,11 +41,11 @@ class Hadith(db.Model):
             'collection': self.collection,
             'book_id': self.bookID,
             'bab_number': str(self.babNumber),
-            'hadith_number': self.hadithNumber,
             'bab_name_en': self.englishBabName,
-            'text_en': cleanup_en_text(self.englishText),
-            'urn_ar': self.arabicURN,
             'bab_name_ar': self.arabicBabName,
+            'hadith_number': self.hadithNumber,
+            'urn_ar': self.arabicURN,
+            'text_en': cleanup_en_text(self.englishText),
             'text_ar': cleanup_text(self.arabicText),
             'grade_ar': self.arabicgrade1,
             'grade_en': self.englishgrade1,
