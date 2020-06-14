@@ -101,5 +101,10 @@ def api_collection_book(name, book_id):
 def api_collection_book_hadiths(collection_name, book_id):
     return Hadith.query.filter_by(collection=collection_name, bookID=book_id).order_by(Hadith.englishURN)
 
+@app.route('/v1/collections/<string:collection_name>/books/<int:book_id>/chapters', methods=['GET'])
+@paginate_results
+def api_collection_book_chapters(collection_name, book_id):
+    abort(501)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
