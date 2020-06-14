@@ -62,17 +62,17 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ### `GET /v1/collections`
 Retrieves list of all collections
 
-### `GET /v1/collections/{collection_id}`
-Retrieves a single collection by id
+### `GET /v1/collections/{collection_name}`
+Retrieves a single collection by name
 
-### `GET /v1/collections/{collection_id}/books`
+### `GET /v1/collections/{collection_name}/books`
 Retrieves list of all books in a given collection
 
-### `GET /v1/collections/{collection_id}/books/{book_id}`
+### `GET /v1/collections/{collection_name}/books/{book_id}`
 Retrieves information about a book in a given collection
 
-### `GET /v1/collections/{collection_id}/books/{book_id}/chapters`
+### `GET /v1/collections/{collection_name}/books/{book_id}/chapters`
 Retrieves list of all chapters in a given collection and book
 
-### `GET /v1/collections/{collection_id}/books/{book_id}/hadiths`
+### `GET /v1/collections/{collection_name}/books/{book_id}/hadiths`
 Retrieves list of all hadith in a given collection and book
