@@ -1,5 +1,5 @@
 import functools
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_swagger import swagger
 from sqlalchemy import func
 
@@ -28,6 +28,11 @@ def paginate_results(f):
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>Welcome to sunnah.com API.</p>"
+
+@app.before_request
+def verify_secret():
+    if request.headers.get('x-aws-secret') != app.config['AWS_SECRET']:
+        abort(401)
 
 @app.route("/v1/spec")
 def spec():
