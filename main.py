@@ -2,11 +2,29 @@ import functools
 from flask import Flask, jsonify, request, abort
 from flask_swagger import swagger
 from sqlalchemy import func
+from werkzeug.exceptions import HTTPException
+
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
 
 from models import db, HadithCollection, Book, Hadith
+
+@app.before_request
+def verify_secret():
+    if request.headers.get('x-aws-secret') != app.config['AWS_SECRET']:
+        abort(401)
+
+@app.errorhandler(HTTPException)
+def jsonify_http_error(error):
+    response = {
+        'error': {
+            'details': error.description,
+            'code': error.code
+        }
+    }
+
+    return jsonify(response), error.code
 
 def paginate_results(f):
     @functools.wraps(f)
@@ -28,11 +46,6 @@ def paginate_results(f):
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>Welcome to sunnah.com API.</p>"
-
-@app.before_request
-def verify_secret():
-    if request.headers.get('x-aws-secret') != app.config['AWS_SECRET']:
-        abort(401)
 
 @app.route("/v1/spec")
 def spec():
