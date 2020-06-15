@@ -6,7 +6,11 @@ RUN mkdir /code
 WORKDIR /code
 COPY requirements.txt /code/
 
-RUN pip install -r requirements.txt
+RUN apt-get update && \
+    apt-get install gcc -y && \
+    apt-get clean
+RUN pip install uwsgi && \
+    pip install -r requirements.txt
 
 RUN groupadd -g 777 appuser && \
     useradd -r -u 777 -g appuser appuser
