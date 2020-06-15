@@ -47,6 +47,16 @@ You can then visit [localhost:5000](http://localhost:5000) to verify that it's r
 $ curl http://localhost:5000
 ```
 
+## Deployment
+
+Configuration files are located at `env.local` and `uwsgi.ini`.
+
+A production ready uWSGI daemon (uwsgi socket exposed on port 5000) can be started with:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
 ## Routes
 
 ### `GET /v1/collections`

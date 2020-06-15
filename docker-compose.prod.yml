@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    command: uwsgi --ini uwsgi.ini
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    ports:
+      - "5000:5000"
+    restart: on-failure
