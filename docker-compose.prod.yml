@@ -7,5 +7,5 @@ services:
       context: .
       dockerfile: Dockerfile-prod
     ports:
-      - "5000:5000"
+      - "5001:5001"
     restart: on-failure

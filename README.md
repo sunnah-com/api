@@ -51,7 +51,7 @@ $ curl http://localhost:5000
 
 Configuration files are located at `env.local` and `uwsgi.ini`.
 
-A production ready uWSGI daemon (uwsgi socket exposed on port 5000) can be started with:
+A production ready uWSGI daemon (uwsgi socket exposed on port 5001) can be started with:
 
 ```bash
 docker-compose -f docker-compose.prod.yml up -d --build
