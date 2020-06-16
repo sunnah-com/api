@@ -35,8 +35,15 @@ class Book(db.Model):
     __tablename__ = 'BookData'
 
     def serialize(self):
+        # Logic for dealing with non-straightforward ourBookIDs
+        bookNumber = str(self.ourBookID)
+        if self.ourBookID == -1:
+            bookNumber = "introduction"
+        elif self.ourBookID = -35:
+            bookNumber = "35b"
+
         return {
-            'bookNumber': str(self.ourBookID),
+            'bookNumber': bookNumber,
             'book': [
                 {
                     'lang': 'en',
