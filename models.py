@@ -38,7 +38,7 @@ class Book(db.Model):
 
     def serialize(self):
         # Logic for dealing with non-straightforward ourBookIDs
-        bookNumber = id_number_map[self.ourBookID] if self.ourBookID in id_number_map else str(self.ourBookID)
+        bookNumber = self.id_number_map.get(self.ourBookID, str(self.ourBookID))
         return {
             'bookNumber': bookNumber,
             'book': [
