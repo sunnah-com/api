@@ -23,7 +23,7 @@ class HadithCollection(db.Model):
                 {
                     'lang': 'ar',
                     'title': self.arabicTitle,
-                    'shortIntro': self['shortIntroArabic'] if hasattr(self, 'shortIntroArabic') else self.shortintro,
+                    'shortIntro': self.shortIntroArabic if hasattr(self, 'shortIntroArabic') else self.shortintro,
                 }
             ],
             'totalHadith': self.totalhadith,
