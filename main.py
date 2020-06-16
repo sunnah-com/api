@@ -8,7 +8,7 @@ from werkzeug.exceptions import HTTPException
 app = Flask(__name__)
 app.config.from_object('config.Config')
 
-from models import db, HadithCollection, Book, Hadith
+from models import db, HadithCollection, Book, Chapter, Hadith
 
 @app.before_request
 def verify_secret():
@@ -104,7 +104,8 @@ def api_collection_book_hadiths(collection_name, book_id):
 @app.route('/v1/collections/<string:collection_name>/books/<int:book_id>/chapters', methods=['GET'])
 @paginate_results
 def api_collection_book_chapters(collection_name, book_id):
-    abort(501)
+    return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id).order_by(Chapter.babID)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

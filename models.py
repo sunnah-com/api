@@ -53,6 +53,33 @@ class Book(db.Model):
         }
 
 
+class Chapter(db.Model):
+    __tablename__ = 'ChapterData'
+
+    def serialize(self):
+        return {
+            'chapterNumber': str(self.babID),
+            'chapter': [
+                {
+                    'lang': 'ar',
+                    'bookId': str(self.arabicBookID),
+                    'chapterNumber': str(self.arabicBabNumber),
+                    'chapterTitle': self.arabicBabName,
+                    'intro': self.arabicIntro,
+                    'ending': self.arabicEnding
+                },
+                {
+                    'lang': 'en',
+                    'bookId': str(self.englishBookID),
+                    'chapterNumber': str(self.englishBabNumber),
+                    'chapterTitle': self.englishBabName,
+                    'intro': self.englishIntro,
+                    'ending': self.englishEnding
+                }
+            ]
+        }
+
+
 class Hadith(db.Model):
     __tablename__ = 'HadithTable'
 
