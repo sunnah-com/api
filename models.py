@@ -12,22 +12,22 @@ class HadithCollection(db.Model):
     def serialize(self):
         return {
             'name': self.name,
-            'has_books': self.hasbooks == "yes",
-            'has_chapters': self.haschapters == "yes",
+            'hasBooks': self.hasbooks == "yes",
+            'hasChapters': self.haschapters == "yes",
             'collection': [
                 {
                     'lang': 'en',
                     'title': self.englishTitle,
-                    'short_intro': self.shortintro,
+                    'shortIntro': self.shortintro,
                 },
                 {
                     'lang': 'ar',
                     'title': self.arabicTitle,
-                    'short_intro': self['shortIntroArabic'] if hasattr(self, 'shortIntroArabic') else self.shortintro,
+                    'shortIntro': self['shortIntroArabic'] if hasattr(self, 'shortIntroArabic') else self.shortintro,
                 }
             ],
-            'total_hadith': self.totalhadith,
-            'total_available_hadith': self.numhadith,
+            'totalHadith': self.totalhadith,
+            'totalAvailableHadith': self.numhadith,
         }
 
 
@@ -36,7 +36,7 @@ class Book(db.Model):
 
     def serialize(self):
         return {
-            'book_id': self.ourBookID,
+            'bookNumber': self.arabicBookNumber,
             'book': [
                 {
                     'lang': 'en',
@@ -47,9 +47,9 @@ class Book(db.Model):
                     'name': self.arabicBookName,
                 }
             ],
-            'hadith_start_number': self.firstNumber,
-            'hadith_end_number': self.lastNumber,
-            'number_of_hadith': self.totalNumber
+            'hadithStartNumber': self.firstNumber,
+            'hadithEndNumber': self.lastNumber,
+            'numberOfHadith': self.totalNumber
         }
 
 
@@ -59,22 +59,23 @@ class Hadith(db.Model):
     def serialize(self):
         return {
             'collection': self.collection,
-            'book_id': self.bookID,
-            'bab_number': str(self.babNumber),
-            'hadith_number': self.hadithNumber,
+            'bookNumber': self.bookNumber,
+            'hadithNumber': self.hadithNumber,
             'hadith': [
                 {
                     'lang': 'en',
-                    'chapter_name': self.englishBabName,
+                    'chapterNumber': self.englishBabNumber,
+                    'chapterTitle': self.englishBabName,
                     'urn': self.englishURN,
-                    'text': cleanup_en_text(self.englishText),
+                    'body': cleanup_en_text(self.englishText),
                     'grade': self.englishgrade1,
                 },
                 {
                     'lang': 'ar',
-                    'chapter_name': self.arabicBabName,
+                    'chapterNumber': self.arabicBabNumber,
+                    'chapterTitle': self.arabicBabName,
                     'urn': self.arabicURN,
-                    'text': cleanup_text(self.arabicText),
+                    'body': cleanup_text(self.arabicText),
                     'grade': self.arabicgrade1,
                 }
             ],
