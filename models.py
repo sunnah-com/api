@@ -36,7 +36,7 @@ class Book(db.Model):
 
     def serialize(self):
         return {
-            'bookNumber': self.arabicBookNumber,
+            'bookNumber': str(self.ourBookID),
             'book': [
                 {
                     'lang': 'en',
