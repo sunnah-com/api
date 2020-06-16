@@ -34,14 +34,11 @@ class HadithCollection(db.Model):
 class Book(db.Model):
     __tablename__ = 'BookData'
 
+    id_number_map = {-1: "introduction", -35: "35b"}
+
     def serialize(self):
         # Logic for dealing with non-straightforward ourBookIDs
-        bookNumber = str(self.ourBookID)
-        if self.ourBookID == -1:
-            bookNumber = "introduction"
-        elif self.ourBookID = -35:
-            bookNumber = "35b"
-
+        bookNumber = id_number_map[self.ourBookID] if self.ourBookID in id_number_map else str(self.ourBookID)
         return {
             'bookNumber': bookNumber,
             'book': [

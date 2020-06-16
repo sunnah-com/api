@@ -91,9 +91,11 @@ def api_collection(name):
 def api_collection_books(name):
     return Book.query.filter_by(collection=name).order_by(func.abs(Book.ourBookID))
 
-@app.route('/v1/collections/<string:name>/books/<int:book_id>', methods=['GET'])
-def api_collection_book(name, book_id):
-    book = Book.query.filter_by(collection=name).filter_by(ourBookID=book_id).first_or_404();
+@app.route('/v1/collections/<string:name>/books/<string:bookNumber>', methods=['GET'])
+def api_collection_book(name, bookNumber):
+    number_id_map = {v: k for k, v in Book.id_number_map.items()}
+    bookID = number_id_map[bookNumber] if self.ourBookID in number_id_map else int(bookNumber)
+    book = Book.query.filter_by(collection=name).filter_by(ourBookID=bookID).first_or_404();
     return jsonify(book.serialize())
 
 @app.route('/v1/collections/<string:collection_name>/books/<int:book_id>/hadiths', methods=['GET'])
