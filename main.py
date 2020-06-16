@@ -94,7 +94,7 @@ def api_collection_books(name):
 @app.route('/v1/collections/<string:name>/books/<string:bookNumber>', methods=['GET'])
 def api_collection_book(name, bookNumber):
     number_id_map = {v: k for k, v in Book.id_number_map.items()}
-    bookID = number_id_map[bookNumber] if self.ourBookID in number_id_map else int(bookNumber)
+    bookID = number_id_map.get(bookNumber, int(bookNumber))
     book = Book.query.filter_by(collection=name).filter_by(ourBookID=bookID).first_or_404();
     return jsonify(book.serialize())
 
