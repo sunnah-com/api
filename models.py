@@ -87,7 +87,7 @@ class Chapter(db.Model):
         bookNumber = Book.get_number_from_id(self.arabicBookID)
         return {
             'bookNumber': bookNumber,
-            'chapterNumber': str(self.babID),
+            'chapterId': str(self.babID),
             'chapter': [
                 {
                     'lang': 'en',
@@ -114,7 +114,7 @@ class Hadith(db.Model):
         return {
             'collection': self.collection,
             'bookNumber': self.bookNumber,
-            'chapterNumber': str(self.babID),
+            'chapterId': str(self.babID),
             'hadithNumber': self.hadithNumber,
             'hadith': [
                 {
