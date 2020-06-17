@@ -5,6 +5,13 @@ from text_transform import cleanup_text, cleanup_en_text
 db = SQLAlchemy(app)
 db.reflect()
 
+def is_number(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
 
 class HadithCollection(db.Model):
     __tablename__ = 'Collections'
@@ -36,9 +43,25 @@ class Book(db.Model):
 
     id_number_map = {-1: "introduction", -35: "35b"}
 
-    def serialize(self):
+    @staticmethod
+    def get_number_from_id(book_id):
         # Logic for dealing with non-straightforward ourBookIDs
-        bookNumber = self.id_number_map.get(self.ourBookID, str(self.ourBookID))
+        book_number = Book.id_number_map.get(book_id, int(book_id))
+        return str(book_number)
+
+    @staticmethod
+    def get_id_from_number(book_number):
+        number_id_map = {v: k for k, v in Book.id_number_map.items()}
+
+        if is_number(book_number):
+            book_id = int(book_number)
+        else:
+            book_id = number_id_map.get(book_number)
+
+        return str(book_id)
+
+    def serialize(self):
+        bookNumber = Book.get_number_from_id(self.ourBookID)
         return {
             'bookNumber': bookNumber,
             'book': [
@@ -57,6 +80,33 @@ class Book(db.Model):
         }
 
 
+class Chapter(db.Model):
+    __tablename__ = 'ChapterData'
+
+    def serialize(self):
+        bookNumber = Book.get_number_from_id(self.arabicBookID)
+        return {
+            'bookNumber': bookNumber,
+            'chapterId': str(self.babID),
+            'chapter': [
+                {
+                    'lang': 'en',
+                    'chapterNumber': str(self.englishBabNumber),
+                    'chapterTitle': self.englishBabName,
+                    'intro': self.englishIntro,
+                    'ending': self.englishEnding
+                },
+                {
+                    'lang': 'ar',
+                    'chapterNumber': str(self.arabicBabNumber),
+                    'chapterTitle': self.arabicBabName,
+                    'intro': self.arabicIntro,
+                    'ending': self.arabicEnding
+                }
+            ]
+        }
+
+
 class Hadith(db.Model):
     __tablename__ = 'HadithTable'
 
@@ -64,6 +114,7 @@ class Hadith(db.Model):
         return {
             'collection': self.collection,
             'bookNumber': self.bookNumber,
+            'chapterId': str(self.babID),
             'hadithNumber': self.hadithNumber,
             'hadith': [
                 {
@@ -82,5 +133,5 @@ class Hadith(db.Model):
                     'body': cleanup_text(self.arabicText),
                     'grade': self.arabicgrade1,
                 }
-            ],
+            ]
         }
