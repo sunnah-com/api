@@ -34,9 +34,13 @@ class HadithCollection(db.Model):
 class Book(db.Model):
     __tablename__ = 'BookData'
 
+    id_number_map = {-1: "introduction", -35: "35b"}
+
     def serialize(self):
+        # Logic for dealing with non-straightforward ourBookIDs
+        bookNumber = self.id_number_map.get(self.ourBookID, str(self.ourBookID))
         return {
-            'bookNumber': self.arabicBookNumber,
+            'bookNumber': bookNumber,
             'book': [
                 {
                     'lang': 'en',
