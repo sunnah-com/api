@@ -108,6 +108,11 @@ def api_collection_book_chapters(collection_name, bookNumber):
     book_id = Book.get_id_from_number(bookNumber)
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id).order_by(Chapter.babID)
 
+@app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters/<float:chapterId>', methods=['GET'])
+def api_collection_book_chapter(collection_name, bookNumber, chapterId):
+    book_id = Book.get_id_from_number(bookNumber)
+    chapter = Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId).first_or_404()
+    return jsonify(chapter.serialize())
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
