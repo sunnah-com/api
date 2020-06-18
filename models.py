@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from main import app
-from text_transform import cleanup_text, cleanup_en_text
+from text_transform import cleanup_text, cleanup_en_text, cleanup_chapter_title
 
 db = SQLAlchemy(app)
 db.reflect()
@@ -99,9 +99,9 @@ class Chapter(db.Model):
                 {
                     'lang': 'ar',
                     'chapterNumber': str(self.arabicBabNumber),
-                    'chapterTitle': self.arabicBabName,
-                    'intro': self.arabicIntro,
-                    'ending': self.arabicEnding
+                    'chapterTitle': cleanup_chapter_title(self.arabicBabName),
+                    'intro': cleanup_text(self.arabicIntro),
+                    'ending': cleanup_text(self.arabicEnding)
                 }
             ]
         }
@@ -128,7 +128,7 @@ class Hadith(db.Model):
                 {
                     'lang': 'ar',
                     'chapterNumber': self.arabicBabNumber,
-                    'chapterTitle': self.arabicBabName,
+                    'chapterTitle': cleanup_chapter_title(self.arabicBabName),
                     'urn': self.arabicURN,
                     'body': cleanup_text(self.arabicText),
                     'grade': self.arabicgrade1,
