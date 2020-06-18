@@ -1,0 +1,66 @@
+Get the list of chapters of a book for a collection
+---
+definitions:
+  - schema:
+      id: Chapter
+      properties:
+        bookNumber:
+          type: string
+          description: The number of the book this chapter belongs to
+        chapterId:
+          type: string
+          description: The id of the chapter
+        chapter:
+          type: object
+          description: Language specific data of the chapter
+          parameters:
+            lang:
+              type: string
+            chapterNumber:
+              type: string
+            chapterTitle:
+              type: string
+            intro:
+              type: string
+            ending:
+              type: string
+
+parameters:
+  - in: path
+    name: collection_name
+    description: name of collection
+    required: true
+    type: string
+  - in: path
+    name: bookNumber
+    description: number of the book
+    required: true
+    type: string
+  - in: query
+    name: limit
+    description: maximum number of items
+    required: false
+    type: integer
+  - in: query
+    name: page
+    required: false
+    type: integer
+
+responses:
+  200:
+    description: Paginated list of chapters of a book of a collection
+    schema:
+      type: object
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        previous:
+          type: integer
+        next:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/definitions/Chapter"

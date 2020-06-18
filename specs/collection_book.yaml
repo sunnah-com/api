@@ -1,0 +1,48 @@
+Get a book of a collection
+---
+definitions:
+  - schema:
+      id: Book
+      properties:
+        bookNumber:
+          type: string
+          description: the Book's name
+        book:
+          type: array
+          description: Language specific data of the book
+          items:
+            type: object
+            properties:
+              lang:
+                type: string
+              name:
+                type: string
+        hadithStartNumber:
+          type: integer
+          description: The first hadith number that is available in this book
+        hadithEndNumber:
+          type: integer
+          description: The last hadith number that is available in this book
+        numberOfHadith:
+          type: integer
+          description: Total number of available hadith in this book
+
+parameters:
+  - in: path
+    name: name
+    description: name of collection
+    required: true
+    type: string
+  - in: path
+    name: bookNumber
+    description: number of the book
+    required: true
+    type: string
+
+responses:
+  200:
+    description: A book of a collection
+    schema:
+      type: array
+      items:
+        $ref: "#/definitions/Book"
