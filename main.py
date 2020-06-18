@@ -52,6 +52,7 @@ def spec():
     swag = swagger(app, from_file_keyword="swagger_from_file")
     swag['info']['version'] = "1.0"
     swag['info']['title'] = "Sunnah.com API"
+    swag['host'] = 'api.sunnah.com'
     return jsonify(swag)
 
 @app.route('/v1/collections', methods=['GET'])

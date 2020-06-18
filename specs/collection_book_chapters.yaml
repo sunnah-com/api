@@ -23,7 +23,7 @@ definitions:
             intro:
               type: string
             ending:
-              type: string\
+              type: string
 
 parameters:
   - in: path
