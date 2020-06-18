@@ -49,7 +49,7 @@ def home():
 
 @app.route("/v1/spec")
 def spec():
-    swag = swagger(app)
+    swag = swagger(app, from_file_keyword="swagger_from_file")
     swag['info']['version'] = "1.0"
     swag['info']['title'] = "Sunnah.com API"
     return jsonify(swag)
@@ -57,42 +57,32 @@ def spec():
 @app.route('/v1/collections', methods=['GET'])
 @paginate_results
 def api_collections():
+    """
+        swagger_from_file: specs/collections.yaml
+    """
     return HadithCollection.query.order_by(HadithCollection.collectionID)
 
 @app.route('/v1/collections/<string:name>', methods=['GET'])
 def api_collection(name):
     """
-        Get collection by name
-        ---
-        definitions:
-          - schema:
-              id: Collection
-              properties:
-                name:
-                 type: string
-                 description: the Collection's name
-        parameters:
-           - name: name
-             in: path
-             description: name of collection
-             required: true
-             type: string
-        responses:
-          200:
-            description: A collection
-            schema:
-              $ref: "#/definitions/Collection"
-        """
+        swagger_from_file: specs/collection.yaml
+    """
     collection = HadithCollection.query.filter_by(name=name).first_or_404()
     return jsonify(collection.serialize())
 
 @app.route('/v1/collections/<string:name>/books', methods=['GET'])
 @paginate_results
 def api_collection_books(name):
+    """
+        swagger_from_file: specs/collection_books.yaml
+    """
     return Book.query.filter_by(collection=name).order_by(func.abs(Book.ourBookID))
 
 @app.route('/v1/collections/<string:name>/books/<string:bookNumber>', methods=['GET'])
 def api_collection_book(name, bookNumber):
+    """
+        swagger_from_file: specs/collection_book.yaml
+    """
     book_id = Book.get_id_from_number(bookNumber)
     book = Book.query.filter_by(collection=name, ourBookID=book_id).first_or_404()
     return jsonify(book.serialize())
@@ -100,11 +90,17 @@ def api_collection_book(name, bookNumber):
 @app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/hadiths', methods=['GET'])
 @paginate_results
 def api_collection_book_hadiths(collection_name, bookNumber):
+    """
+        swagger_from_file: specs/collection_book_hadiths.yaml
+    """
     return Hadith.query.filter_by(collection=collection_name, bookNumber=bookNumber).order_by(Hadith.englishURN)
 
 @app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters', methods=['GET'])
 @paginate_results
 def api_collection_book_chapters(collection_name, bookNumber):
+    """
+        swagger_from_file: specs/collection_book_chapters.yaml
+    """
     book_id = Book.get_id_from_number(bookNumber)
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id).order_by(Chapter.babID)
 
