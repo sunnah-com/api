@@ -1,0 +1,40 @@
+Get a randomly selected hadith
+---
+definitions:
+    - schema:
+        id: Hadith
+        properties:
+          collection:
+            type: string
+            description: the Collection's name
+          bookNumber:
+            type: string
+            description: The number of the book this hadith belongs to
+          chapterId:
+            type: string
+            description: The id of the chapter this hadith belongs to
+          hadithNumber:
+            type: integer
+          hadith:
+            type: object
+            description: Language specific data of the hadith
+            parameters:
+              lang:
+                type: string
+              chapterNumber:
+                type: string
+              chapterTitle:
+                type: string
+              urn:
+                type: string
+              body:
+                type: string
+              grade:
+                type: string
+
+
+responses:
+    200:
+      description: A randomly selected hadith
+      schema:
+        $ref: "#/definitions/Hadith"

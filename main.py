@@ -127,5 +127,14 @@ def api_collection_book_chapter(collection_name, bookNumber, chapterId):
     book_id = Book.get_id_from_number(bookNumber)
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId)
 
+@app.route('/v1/hadiths/random', methods=['GET'])
+@single_resource
+def api_hadiths_random():
+    """
+        swagger_from_file: specs/hadiths_random.yaml
+    """
+    # TODO Make this configurable instead of hardcoding
+    return Hadith.query.filter_by(collection='riyadussaliheen').order_by(func.rand())
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
