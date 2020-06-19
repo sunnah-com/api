@@ -43,6 +43,14 @@ def paginate_results(f):
         return jsonify(result)
     return decorated_function
 
+def single_resource(f):
+    @functools.wraps(f)
+    def decorated_function(*args, **kwargs):
+        result = f(*args, **kwargs).first_or_404()
+        result = result.serialize()
+        return jsonify(result)
+    return decorated_function
+
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>Welcome to sunnah.com API.</p>"
@@ -64,12 +72,12 @@ def api_collections():
     return HadithCollection.query.order_by(HadithCollection.collectionID)
 
 @app.route('/v1/collections/<string:name>', methods=['GET'])
+@single_resource
 def api_collection(name):
     """
         swagger_from_file: specs/collection.yaml
     """
-    collection = HadithCollection.query.filter_by(name=name).first_or_404()
-    return jsonify(collection.serialize())
+    return HadithCollection.query.filter_by(name=name)
 
 @app.route('/v1/collections/<string:name>/books', methods=['GET'])
 @paginate_results
@@ -80,13 +88,13 @@ def api_collection_books(name):
     return Book.query.filter_by(collection=name).order_by(func.abs(Book.ourBookID))
 
 @app.route('/v1/collections/<string:name>/books/<string:bookNumber>', methods=['GET'])
+@single_resource
 def api_collection_book(name, bookNumber):
     """
         swagger_from_file: specs/collection_book.yaml
     """
     book_id = Book.get_id_from_number(bookNumber)
-    book = Book.query.filter_by(collection=name, ourBookID=book_id).first_or_404()
-    return jsonify(book.serialize())
+    return Book.query.filter_by(collection=name, ourBookID=book_id)
 
 @app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/hadiths', methods=['GET'])
 @paginate_results
@@ -106,10 +114,10 @@ def api_collection_book_chapters(collection_name, bookNumber):
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id).order_by(Chapter.babID)
 
 @app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters/<float:chapterId>', methods=['GET'])
+@single_resource
 def api_collection_book_chapter(collection_name, bookNumber, chapterId):
     book_id = Book.get_id_from_number(bookNumber)
-    chapter = Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId).first_or_404()
-    return jsonify(chapter.serialize())
+    return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
