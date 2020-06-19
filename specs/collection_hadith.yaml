@@ -1,4 +1,4 @@
-Get a hadith of a book for a collection
+Get a hadith of a collection
 ---
 definitions:
     - schema:
@@ -36,11 +36,6 @@ parameters:
     - in: path
       name: collection_name
       description: name of collection
-      required: true
-      type: string
-    - in: path
-      name: bookNumber
-      description: number of the book
       required: true
       type: string
     - in: path
