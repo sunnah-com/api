@@ -104,6 +104,14 @@ def api_collection_book_hadiths(collection_name, bookNumber):
     """
     return Hadith.query.filter_by(collection=collection_name, bookNumber=bookNumber).order_by(Hadith.englishURN)
 
+@app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/hadiths/<string:hadithNumber>', methods=['GET'])
+@single_resource
+def api_collection_book_hadith(collection_name, bookNumber, hadithNumber):
+    """
+        swagger_from_file: specs/collection_book_hadith.yaml
+    """
+    return Hadith.query.filter_by(collection=collection_name, bookNumber=bookNumber, hadithNumber=hadithNumber)
+
 @app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters', methods=['GET'])
 @paginate_results
 def api_collection_book_chapters(collection_name, bookNumber):
