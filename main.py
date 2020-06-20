@@ -1,6 +1,5 @@
 import functools
 from flask import Flask, jsonify, request, abort
-from flask_swagger import swagger
 from sqlalchemy import func
 from werkzeug.exceptions import HTTPException
 
@@ -55,69 +54,40 @@ def single_resource(f):
 def home():
     return "<h1>Welcome to sunnah.com API.</p>"
 
-@app.route("/v1/spec")
-def spec():
-    swag = swagger(app, from_file_keyword="swagger_from_file")
-    swag['info']['version'] = "1.0"
-    swag['info']['title'] = "Sunnah.com API"
-    swag['host'] = 'api.sunnah.com'
-    return jsonify(swag)
-
 @app.route('/v1/collections', methods=['GET'])
 @paginate_results
 def api_collections():
-    """
-        swagger_from_file: specs/collections.yaml
-    """
     return HadithCollection.query.order_by(HadithCollection.collectionID)
 
 @app.route('/v1/collections/<string:name>', methods=['GET'])
 @single_resource
 def api_collection(name):
-    """
-        swagger_from_file: specs/collection.yaml
-    """
     return HadithCollection.query.filter_by(name=name)
 
 @app.route('/v1/collections/<string:name>/books', methods=['GET'])
 @paginate_results
 def api_collection_books(name):
-    """
-        swagger_from_file: specs/collection_books.yaml
-    """
     return Book.query.filter_by(collection=name).order_by(func.abs(Book.ourBookID))
 
 @app.route('/v1/collections/<string:name>/books/<string:bookNumber>', methods=['GET'])
 @single_resource
 def api_collection_book(name, bookNumber):
-    """
-        swagger_from_file: specs/collection_book.yaml
-    """
     book_id = Book.get_id_from_number(bookNumber)
     return Book.query.filter_by(collection=name, ourBookID=book_id)
 
 @app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/hadiths', methods=['GET'])
 @paginate_results
 def api_collection_book_hadiths(collection_name, bookNumber):
-    """
-        swagger_from_file: specs/collection_book_hadiths.yaml
-    """
     return Hadith.query.filter_by(collection=collection_name, bookNumber=bookNumber).order_by(Hadith.englishURN)
 
 @app.route('/v1/collections/<string:collection_name>/hadiths/<string:hadithNumber>', methods=['GET'])
 @single_resource
 def api_collection_hadith(collection_name, hadithNumber):
-    """
-        swagger_from_file: specs/collection_hadith.yaml
-    """
     return Hadith.query.filter_by(collection=collection_name, hadithNumber=hadithNumber)
 
 @app.route('/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters', methods=['GET'])
 @paginate_results
 def api_collection_book_chapters(collection_name, bookNumber):
-    """
-        swagger_from_file: specs/collection_book_chapters.yaml
-    """
     book_id = Book.get_id_from_number(bookNumber)
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id).order_by(Chapter.babID)
 
@@ -130,9 +100,6 @@ def api_collection_book_chapter(collection_name, bookNumber, chapterId):
 @app.route('/v1/hadiths/random', methods=['GET'])
 @single_resource
 def api_hadiths_random():
-    """
-        swagger_from_file: specs/hadiths_random.yaml
-    """
     # TODO Make this configurable instead of hardcoding
     return Hadith.query.filter_by(collection='riyadussaliheen').order_by(func.rand())
 
