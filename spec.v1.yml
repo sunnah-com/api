@@ -16,17 +16,6 @@ info:
 security:
   - APIKey: []
 paths:
-  /hadiths/random:
-    get:
-      summary: Get a randomly selected hadith
-      description: ""
-      responses:
-        "200":
-          description: A randomly selected hadith
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Hadith"
   /collections:
     get:
       summary: Get the list of collections
@@ -48,6 +37,77 @@ paths:
       parameters:
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/page"
+  "/collections/{collectionName}":
+    get:
+      summary: Get a collection by name
+      description: ""
+      responses:
+        "200":
+          description: A collection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collection"
+      parameters:
+        - in: path
+          name: collectionName
+          description: name of collection
+          required: true
+          schema:
+            type: string
+  "/collections/{collectionName}/books":
+    get:
+      summary: Get the list of books for a collection
+      description: ""
+      responses:
+        "200":
+          description: Paginated list of available books of a collection
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Book"
+                  - $ref: "#/components/schemas/PaginatedResponse"
+      parameters:
+        - in: path
+          name: collectionName
+          description: name of collection
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/page"
+  "/collections/{collectionName}/books/{bookNumber}":
+    get:
+      summary: Get a book of a collection
+      description: ""
+      responses:
+        "200":
+          description: A book of a collection
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Book"
+      parameters:
+        - in: path
+          name: collectionName
+          description: name of collection
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: bookNumber
+          description: number of the book
+          required: true
+          schema:
+            type: string
   "/collections/{collectionName}/books/{bookNumber}/chapters":
     get:
       summary: Get the list of chapters of a book for a collection
@@ -138,77 +198,17 @@ paths:
           required: true
           schema:
             type: string
-  "/collections/{collectionName}/books/{bookNumber}":
+  /hadiths/random:
     get:
-      summary: Get a book of a collection
+      summary: Get a randomly selected hadith
       description: ""
       responses:
         "200":
-          description: A book of a collection
+          description: A randomly selected hadith
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Book"
-      parameters:
-        - in: path
-          name: collectionName
-          description: name of collection
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: bookNumber
-          description: number of the book
-          required: true
-          schema:
-            type: string
-  "/collections/{collectionName}/books":
-    get:
-      summary: Get the list of books for a collection
-      description: ""
-      responses:
-        "200":
-          description: Paginated list of available books of a collection
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/Book"
-                  - $ref: "#/components/schemas/PaginatedResponse"
-      parameters:
-        - in: path
-          name: collectionName
-          description: name of collection
-          required: true
-          schema:
-            type: string
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/page"
-  "/collections/{collectionName}":
-    get:
-      summary: Get collection by name
-      description: ""
-      responses:
-        "200":
-          description: A collection
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Collection"
-      parameters:
-        - in: path
-          name: collectionName
-          description: name of collection
-          required: true
-          schema:
-            type: string
+                $ref: "#/components/schemas/Hadith"
 servers:
   - url: https://api.sunnah.com/v1/
 components:
@@ -241,12 +241,18 @@ components:
       properties:
         total:
           type: integer
+          description: Total number of results matching the dataset
         limit:
           type: integer
+          description: Number of results in the current dataset
         previous:
           type: integer
+          nullable: true
+          description: Number of the previous page
         next:
           type: integer
+          nullable: true
+          description: Number of the next page
     Hadith:
       type: object
       properties:
