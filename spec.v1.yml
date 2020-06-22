@@ -8,11 +8,11 @@ info:
     our REST API.
 
 
-    You will need an API key to access this data, which you may request from https://sunnah.com/contact.
+    You will need an API key to access this data, which you may request by creating an
+    issue on our GitHub repo. [Create an issue](https://github.com/sunnah-com/api/issues/new?template=request-for-api-access.md&title=Request+for+API+access%3A+[Your+Name])
   contact:
     name: Sunnah.com
     url: https://sunnah.com/contact
-    email: sunnah@iman.net
 security:
   - APIKey: []
 paths:
@@ -51,7 +51,7 @@ paths:
       parameters:
         - in: path
           name: collectionName
-          description: name of collection
+          description: Name of the collection
           required: true
           schema:
             type: string
@@ -76,7 +76,7 @@ paths:
       parameters:
         - in: path
           name: collectionName
-          description: name of collection
+          description: Name of the collection
           required: true
           schema:
             type: string
@@ -98,13 +98,13 @@ paths:
       parameters:
         - in: path
           name: collectionName
-          description: name of collection
+          description: Name of the collection
           required: true
           schema:
             type: string
         - in: path
           name: bookNumber
-          description: number of the book
+          description: Number of the book
           required: true
           schema:
             type: string
@@ -129,13 +129,13 @@ paths:
       parameters:
         - in: path
           name: collectionName
-          description: name of collection
+          description: Name of the collection
           required: true
           schema:
             type: string
         - in: path
           name: bookNumber
-          description: number of the book
+          description: Number of the book
           required: true
           schema:
             type: string
@@ -162,13 +162,13 @@ paths:
       parameters:
         - in: path
           name: collectionName
-          description: name of collection
+          description: Name of the collection
           required: true
           schema:
             type: string
         - in: path
           name: bookNumber
-          description: number of the book
+          description: Number of the book
           required: true
           schema:
             type: string
@@ -188,13 +188,13 @@ paths:
       parameters:
         - in: path
           name: collectionName
-          description: name of collection
+          description: Name of the collection
           required: true
           schema:
             type: string
         - in: path
           name: hadithNumber
-          description: number of the hadith
+          description: Number of the hadith
           required: true
           schema:
             type: string
@@ -244,7 +244,7 @@ components:
           description: Total number of results matching the dataset
         limit:
           type: integer
-          description: Number of results in the current dataset
+          description: Maximum number of results in the current dataset
         previous:
           type: integer
           nullable: true
@@ -258,15 +258,15 @@ components:
       properties:
         collection:
           type: string
-          description: the Collection's name
+          description: Name of the collection
         bookNumber:
           type: string
           description: The number of the book this hadith belongs to
         chapterId:
           type: string
-          description: The id of the chapter this hadith belongs to
+          description: The ID of the chapter this hadith belongs to
         hadithNumber:
-          type: integer
+          type: string
         hadith:
           type: array
           description: Language specific data of the hadith
@@ -280,7 +280,7 @@ components:
               chapterTitle:
                 type: string
               urn:
-                type: string
+                type: integer
               body:
                 type: string
               grade:
@@ -292,7 +292,7 @@ components:
           description: The number of the book this chapter belongs to
         chapterId:
           type: string
-          description: The id of the chapter
+          description: The ID of the chapter
         chapter:
           type: array
           description: Language specific data of the chapter
@@ -307,13 +307,15 @@ components:
                 type: string
               intro:
                 type: string
+                nullable: true
               ending:
                 type: string
+                nullable: true
     Book:
       properties:
         bookNumber:
           type: string
-          description: the Book's name
+          description: Number of the book
         book:
           type: array
           description: Language specific data of the book
@@ -337,13 +339,13 @@ components:
       properties:
         name:
           type: string
-          description: the Collection's name
+          description: Name of the collection
         hasBooks:
           type: boolean
-          description: whether the Collection has books or not
+          description: Whether the collection has books or not
         hasChapters:
           type: boolean
-          description: whether the Collection has chapters or not
+          description: Whether the collection has chapters or not
         collection:
           type: array
           description: Language specific data of the collection
