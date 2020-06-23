@@ -24,6 +24,11 @@ assignees: ''
 
 
 
+* **Is your use case better served by having an offline dump of hadith data or programmatic API access?**
+  <!-- Do you require API access for your purpose or would you rather have an offline snapshot of the data? -->
+
+
+
 * **What are the languages in which would you like hadith data?**
   <!-- Which spoken languages are you interested in acquiring hadith data for? -->
 
