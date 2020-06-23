@@ -21,3 +21,13 @@ assignees: ''
   <!-- There are two dimensions in our rate limiting policy: maximum requests per second and maximum requests per day -->
    * **Maximum requests per second:**
    * **Maximum requests per day:**
+
+
+
+* **What are the languages in which would you like hadith data?**
+  <!-- Which spoken languages are you interested in acquiring hadith data for? -->
+
+
+
+* **What programming language will your API client be in?**
+  <!-- Which programming language will you use to query our service? -->
