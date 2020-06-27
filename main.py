@@ -11,7 +11,7 @@ from models import db, HadithCollection, Book, Chapter, Hadith
 
 @app.before_request
 def verify_secret():
-    if request.headers.get('x-aws-secret') != app.config['AWS_SECRET']:
+    if not app.debug and request.headers.get('x-aws-secret') != app.config['AWS_SECRET']:
         abort(401)
 
 @app.errorhandler(HTTPException)
