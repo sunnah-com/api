@@ -23,18 +23,8 @@ class HadithCollection(db.Model):
             "hasBooks": self.hasbooks == "yes",
             "hasChapters": self.haschapters == "yes",
             "collection": [
-                {
-                    "lang": "en",
-                    "title": self.englishTitle,
-                    "shortIntro": self.shortintro,
-                },
-                {
-                    "lang": "ar",
-                    "title": self.arabicTitle,
-                    "shortIntro": self.shortIntroArabic
-                    if hasattr(self, "shortIntroArabic")
-                    else self.shortintro,
-                },
+                {"lang": "en", "title": self.englishTitle, "shortIntro": self.shortintro},
+                {"lang": "ar", "title": self.arabicTitle, "shortIntro": self.shortIntroArabic if hasattr(self, "shortIntroArabic") else self.shortintro},
             ],
             "totalHadith": self.totalhadith,
             "totalAvailableHadith": self.numhadith,
@@ -67,10 +57,7 @@ class Book(db.Model):
         bookNumber = Book.get_number_from_id(self.ourBookID)
         return {
             "bookNumber": bookNumber,
-            "book": [
-                {"lang": "en", "name": self.englishBookName},
-                {"lang": "ar", "name": self.arabicBookName},
-            ],
+            "book": [{"lang": "en", "name": self.englishBookName}, {"lang": "ar", "name": self.arabicBookName}],
             "hadithStartNumber": self.firstNumber,
             "hadithEndNumber": self.lastNumber,
             "numberOfHadith": self.totalNumber,

@@ -12,7 +12,7 @@ from models import HadithCollection, Book, Chapter, Hadith
 
 @app.before_request
 def verify_secret():
-    if (not app.debug and request.headers.get("x-aws-secret") != app.config["AWS_SECRET"]):
+    if not app.debug and request.headers.get("x-aws-secret") != app.config["AWS_SECRET"]:
         abort(401)
 
 
@@ -29,9 +29,7 @@ def paginate_results(f):
         limit = int(request.args.get("limit", 50))
         page = int(request.args.get("page", 1))
 
-        queryset = f(*args, **kwargs).paginate(
-            page=page, per_page=limit, max_per_page=100
-        )
+        queryset = f(*args, **kwargs).paginate(page=page, per_page=limit, max_per_page=100)
         result = {
             "data": [x.serialize() for x in queryset.items],
             "total": queryset.total,
@@ -84,48 +82,30 @@ def api_collection_book(name, bookNumber):
     return Book.query.filter_by(collection=name, ourBookID=book_id)
 
 
-@app.route(
-    "/v1/collections/<string:collection_name>/books/<string:bookNumber>/hadiths",
-    methods=["GET"],
-)
+@app.route("/v1/collections/<string:collection_name>/books/<string:bookNumber>/hadiths", methods=["GET"])
 @paginate_results
 def api_collection_book_hadiths(collection_name, bookNumber):
-    return Hadith.query.filter_by(
-        collection=collection_name, bookNumber=bookNumber
-    ).order_by(Hadith.englishURN)
+    return Hadith.query.filter_by(collection=collection_name, bookNumber=bookNumber).order_by(Hadith.englishURN)
 
 
-@app.route(
-    "/v1/collections/<string:collection_name>/hadiths/<string:hadithNumber>",
-    methods=["GET"],
-)
+@app.route("/v1/collections/<string:collection_name>/hadiths/<string:hadithNumber>", methods=["GET"])
 @single_resource
 def api_collection_hadith(collection_name, hadithNumber):
     return Hadith.query.filter_by(collection=collection_name, hadithNumber=hadithNumber)
 
 
-@app.route(
-    "/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters",
-    methods=["GET"],
-)
+@app.route("/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters", methods=["GET"])
 @paginate_results
 def api_collection_book_chapters(collection_name, bookNumber):
     book_id = Book.get_id_from_number(bookNumber)
-    return Chapter.query.filter_by(
-        collection=collection_name, arabicBookID=book_id
-    ).order_by(Chapter.babID)
+    return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id).order_by(Chapter.babID)
 
 
-@app.route(
-    "/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters/<float:chapterId>",
-    methods=["GET"],
-)
+@app.route("/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters/<float:chapterId>", methods=["GET"])
 @single_resource
 def api_collection_book_chapter(collection_name, bookNumber, chapterId):
     book_id = Book.get_id_from_number(bookNumber)
-    return Chapter.query.filter_by(
-        collection=collection_name, arabicBookID=book_id, babID=chapterId
-    )
+    return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId)
 
 
 @app.route("/v1/hadiths/random", methods=["GET"])

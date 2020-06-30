@@ -46,9 +46,7 @@ def standardize_terms(text):
     text = text.replace("he Holy Prophet ", "he Prophet ")
 
     text = re.sub(r"Allah\'s Messenger (?!\()", "Allah's Messenger (\ufdfa) ", text)
-    text = re.sub(
-        r"he Messenger of Allah (?!\()", "he Messenger of Allah (\ufdfa) ", text
-    )
+    text = re.sub(r"he Messenger of Allah (?!\()", "he Messenger of Allah (\ufdfa) ", text)
     text = re.sub(r"he Prophet (?!\()", "he Prophet (\ufdfa) ", text)
 
     return text
@@ -61,10 +59,7 @@ def fix_hyperlinks(text):
     quran_links = re.findall(r"javascript:openquran\((.+?)\)", text)
     for link_match in quran_links:
         surah, begin, end = link_match.split(",")
-        text = text.replace(
-            "javascript:openquran({})".format(link_match),
-            "https://quran.com/{}/{}-{}".format(int(surah) + 1, begin, end),
-        )
+        text = text.replace("javascript:openquran({})".format(link_match), "https://quran.com/{}/{}-{}".format(int(surah) + 1, begin, end))
     return text
 
 

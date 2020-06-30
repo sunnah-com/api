@@ -1,5 +1,5 @@
 [flake8]
-max-line-length = 119
+max-line-length = 160
 max-complexity = 10
 exclude = 
     .git,
