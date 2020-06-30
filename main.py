@@ -2,11 +2,12 @@ import functools
 from flask import Flask, jsonify, request, abort
 from sqlalchemy import func
 from werkzeug.exceptions import HTTPException
-from models import HadithCollection, Book, Chapter, Hadith
 
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
+
+from models import HadithCollection, Book, Chapter, Hadith
 
 
 @app.before_request
