@@ -54,7 +54,7 @@ def single_resource(f):
 
 @app.route("/", methods=["GET"])
 def home():
-    return "<h1>Welcome to sunnah.com API.</p>"
+    return "<h1>Welcome to sunnah.com API.</h1>"
 
 
 @app.route("/v1/collections", methods=["GET"])
