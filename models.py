@@ -5,6 +5,7 @@ from text_transform import cleanup_text, cleanup_en_text, cleanup_chapter_title
 db = SQLAlchemy(app)
 db.reflect()
 
+
 def is_number(s):
     try:
         int(s)
@@ -14,32 +15,34 @@ def is_number(s):
 
 
 class HadithCollection(db.Model):
-    __tablename__ = 'Collections'
+    __tablename__ = "Collections"
 
     def serialize(self):
         return {
-            'name': self.name,
-            'hasBooks': self.hasbooks == "yes",
-            'hasChapters': self.haschapters == "yes",
-            'collection': [
+            "name": self.name,
+            "hasBooks": self.hasbooks == "yes",
+            "hasChapters": self.haschapters == "yes",
+            "collection": [
                 {
-                    'lang': 'en',
-                    'title': self.englishTitle,
-                    'shortIntro': self.shortintro,
+                    "lang": "en",
+                    "title": self.englishTitle,
+                    "shortIntro": self.shortintro,
                 },
                 {
-                    'lang': 'ar',
-                    'title': self.arabicTitle,
-                    'shortIntro': self.shortIntroArabic if hasattr(self, 'shortIntroArabic') else self.shortintro,
-                }
+                    "lang": "ar",
+                    "title": self.arabicTitle,
+                    "shortIntro": self.shortIntroArabic
+                    if hasattr(self, "shortIntroArabic")
+                    else self.shortintro,
+                },
             ],
-            'totalHadith': self.totalhadith,
-            'totalAvailableHadith': self.numhadith,
+            "totalHadith": self.totalhadith,
+            "totalAvailableHadith": self.numhadith,
         }
 
 
 class Book(db.Model):
-    __tablename__ = 'BookData'
+    __tablename__ = "BookData"
 
     id_number_map = {-1: "introduction", -35: "35b"}
 
@@ -63,75 +66,69 @@ class Book(db.Model):
     def serialize(self):
         bookNumber = Book.get_number_from_id(self.ourBookID)
         return {
-            'bookNumber': bookNumber,
-            'book': [
-                {
-                    'lang': 'en',
-                    'name': self.englishBookName,
-                },
-                {
-                    'lang': 'ar',
-                    'name': self.arabicBookName,
-                }
+            "bookNumber": bookNumber,
+            "book": [
+                {"lang": "en", "name": self.englishBookName},
+                {"lang": "ar", "name": self.arabicBookName},
             ],
-            'hadithStartNumber': self.firstNumber,
-            'hadithEndNumber': self.lastNumber,
-            'numberOfHadith': self.totalNumber
+            "hadithStartNumber": self.firstNumber,
+            "hadithEndNumber": self.lastNumber,
+            "numberOfHadith": self.totalNumber,
         }
 
 
 class Chapter(db.Model):
-    __tablename__ = 'ChapterData'
+    __tablename__ = "ChapterData"
 
     def serialize(self):
         bookNumber = Book.get_number_from_id(self.arabicBookID)
         return {
-            'bookNumber': bookNumber,
-            'chapterId': str(self.babID),
-            'chapter': [
+            "bookNumber": bookNumber,
+            "chapterId": str(self.babID),
+            "chapter": [
                 {
-                    'lang': 'en',
-                    'chapterNumber': str(self.englishBabNumber),
-                    'chapterTitle': self.englishBabName,
-                    'intro': self.englishIntro,
-                    'ending': self.englishEnding
+                    "lang": "en",
+                    "chapterNumber": str(self.englishBabNumber),
+                    "chapterTitle": self.englishBabName,
+                    "intro": self.englishIntro,
+                    "ending": self.englishEnding,
                 },
                 {
-                    'lang': 'ar',
-                    'chapterNumber': str(self.arabicBabNumber),
-                    'chapterTitle': cleanup_chapter_title(self.arabicBabName),
-                    'intro': cleanup_text(self.arabicIntro),
-                    'ending': cleanup_text(self.arabicEnding)
-                }
-            ]
+                    "lang": "ar",
+                    "chapterNumber": str(self.arabicBabNumber),
+                    "chapterTitle": cleanup_chapter_title(self.arabicBabName),
+                    "intro": cleanup_text(self.arabicIntro),
+                    "ending": cleanup_text(self.arabicEnding),
+                },
+            ],
         }
 
 
 class Hadith(db.Model):
-    __tablename__ = 'HadithTable'
+    __tablename__ = "HadithTable"
 
     def serialize(self):
         return {
-            'collection': self.collection,
-            'bookNumber': self.bookNumber,
-            'chapterId': str(self.babID),
-            'hadithNumber': self.hadithNumber,
-            'hadith': [
+            "collection": self.collection,
+            "bookNumber": self.bookNumber,
+            "chapterId": str(self.babID),
+            "hadithNumber": self.hadithNumber,
+            "hadith": [
                 {
-                    'lang': 'en',
-                    'chapterNumber': self.englishBabNumber,
-                    'chapterTitle': self.englishBabName,
-                    'urn': self.englishURN,
-                    'body': cleanup_en_text(self.englishText),
-                    'grade': self.englishgrade1,
+                    "lang": "en",
+                    "chapterNumber": self.englishBabNumber,
+                    "chapterTitle": self.englishBabName,
+                    "urn": self.englishURN,
+                    "body": cleanup_en_text(self.englishText),
+                    "grade": self.englishgrade1,
                 },
                 {
-                    'lang': 'ar',
-                    'chapterNumber': self.arabicBabNumber,
-                    'chapterTitle': cleanup_chapter_title(self.arabicBabName),
-                    'urn': self.arabicURN,
-                    'body': cleanup_text(self.arabicText),
-                    'grade': self.arabicgrade1,
-                }
-            ]
+                    "lang": "ar",
+                    "chapterNumber": self.arabicBabNumber,
+                    "chapterTitle": cleanup_chapter_title(self.arabicBabName),
+                    "urn": self.arabicURN,
+                    "body": cleanup_text(self.arabicText),
+                    "grade": self.arabicgrade1,
+                },
+            ],
         }
