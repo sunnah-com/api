@@ -76,3 +76,18 @@ Retrieves list of all chapters in a given collection and book
 
 ### `GET /v1/collections/{collection_name}/books/{book_id}/hadiths`
 Retrieves list of all hadith in a given collection and book
+
+## Linting and Formatting
+
+`flake8` and `black` are used for code linting and formatting respectively. Before submitting pull requests, make sure black and flake8 is run against the code. Follow the instructions below for using `black` and `flake8`:
+
+```sh
+# goto repository root directory
+# make sure the virtual environment is activated
+black .
+flake8 .
+# fix any linting issues
+# Then you are ready to submit your PR
+```
+
+To add more rules for linting and formatting, make changes to `.flake8` and `pyproject.toml` accordingly.
