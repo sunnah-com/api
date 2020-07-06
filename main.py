@@ -1,6 +1,6 @@
 import functools
 from flask import Flask, jsonify, request, abort
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from werkzeug.exceptions import HTTPException
 
 
@@ -106,6 +106,33 @@ def api_collection_book_chapters(collection_name, bookNumber):
 def api_collection_book_chapter(collection_name, bookNumber, chapterId):
     book_id = Book.get_id_from_number(bookNumber)
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId)
+
+
+@app.route("/v1/hadiths", methods=["GET"])
+@paginate_results
+def api_hadiths():
+    collection = request.args.get("collection")
+    bookNumber = request.args.get("bookNumber")
+    babId = request.args.get("chapterId")
+    hadithNumber = request.args.get("hadithNumber")
+
+    queryset = Hadith.query
+    if hadithNumber:
+        queryset = queryset.filter_by(hadithNumber=hadithNumber)
+    if babId:
+        queryset = queryset.filter_by(babID=float(babId))
+    if bookNumber:
+        queryset = queryset.filter_by(bookNumber=bookNumber)
+    if collection:
+        queryset = queryset.filter_by(collection=collection)
+
+    return queryset
+
+
+@app.route("/v1/hadiths/<int:urn>", methods=["GET"])
+@single_resource
+def api_hadith(urn):
+    return Hadith.query.filter(or_(Hadith.arabicURN == urn, Hadith.englishURN == urn))
 
 
 @app.route("/v1/hadiths/random", methods=["GET"])
