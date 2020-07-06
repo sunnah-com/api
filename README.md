@@ -1,18 +1,6 @@
 # Overview
 
-**❌ THIS IS A WORK IN PROGRESS!** The API is not currently available for consumption. Development work is ongoing.
-
-This project will eventually allow consuming a Hadith API built on python's flask framework.
-
-python 3+ is required to run the project.
-
-## Package Structure
-
-```
-├── README.md
-├── main.py
-├── Dockerfile
-```
+The official API of sunnah.com for retrieving information about hadith collections. 
 
 # Getting started
 
@@ -59,23 +47,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ## Routes
 
-### `GET /v1/collections`
-Retrieves list of all collections
-
-### `GET /v1/collections/{collection_name}`
-Retrieves a single collection by name
-
-### `GET /v1/collections/{collection_name}/books`
-Retrieves list of all books in a given collection
-
-### `GET /v1/collections/{collection_name}/books/{book_id}`
-Retrieves information about a book in a given collection
-
-### `GET /v1/collections/{collection_name}/books/{book_id}/chapters`
-Retrieves list of all chapters in a given collection and book
-
-### `GET /v1/collections/{collection_name}/books/{book_id}/hadiths`
-Retrieves list of all hadith in a given collection and book
+Visit https://sunnah.api-docs.io/ for full API documentation.
 
 ## Linting and Formatting
 
