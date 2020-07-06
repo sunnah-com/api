@@ -49,24 +49,6 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 Visit https://sunnah.api-docs.io/ for full API documentation.
 
-### `GET /v1/collections`
-Retrieves list of all collections
-
-### `GET /v1/collections/{collection_name}`
-Retrieves a single collection by name
-
-### `GET /v1/collections/{collection_name}/books`
-Retrieves list of all books in a given collection
-
-### `GET /v1/collections/{collection_name}/books/{book_id}`
-Retrieves information about a book in a given collection
-
-### `GET /v1/collections/{collection_name}/books/{book_id}/chapters`
-Retrieves list of all chapters in a given collection and book
-
-### `GET /v1/collections/{collection_name}/books/{book_id}/hadiths`
-Retrieves list of all hadith in a given collection and book
-
 ## Linting and Formatting
 
 `flake8` and `black` are used for code linting and formatting respectively. Before submitting pull requests, make sure black and flake8 is run against the code. Follow the instructions below for using `black` and `flake8`:
