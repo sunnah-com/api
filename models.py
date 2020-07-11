@@ -94,7 +94,15 @@ class Chapter(db.Model):
 class Hadith(db.Model):
     __tablename__ = "HadithTable"
 
+    rel_collection = db.relationship("HadithCollection", primaryjoin="Hadith.collection == HadithCollection.name", foreign_keys="Hadith.collection", lazy="joined")
+
     def serialize(self):
+        grades = {"en": [], "ar": []}
+        if self.englishgrade1:
+            grades["en"] = [{"graded_by": self.rel_collection.englishgrade1, "grade": self.englishgrade1}]
+        if self.arabicgrade1:
+            grades["ar"] = [{"graded_by": self.rel_collection.arabicgrade1, "grade": self.arabicgrade1}]
+
         return {
             "collection": self.collection,
             "bookNumber": self.bookNumber,
@@ -107,7 +115,7 @@ class Hadith(db.Model):
                     "chapterTitle": self.englishBabName,
                     "urn": self.englishURN,
                     "body": cleanup_en_text(self.englishText),
-                    "grade": self.englishgrade1,
+                    "grades": grades["en"],
                 },
                 {
                     "lang": "ar",
@@ -115,7 +123,7 @@ class Hadith(db.Model):
                     "chapterTitle": cleanup_chapter_title(self.arabicBabName),
                     "urn": self.arabicURN,
                     "body": cleanup_text(self.arabicText),
-                    "grade": self.arabicgrade1,
+                    "grades": grades["ar"],
                 },
             ],
         }
