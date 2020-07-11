@@ -343,8 +343,16 @@ components:
                 type: integer
               body:
                 type: string
-              grade:
-                type: string
+              grades:
+                type: array
+                description: Hadith grade information
+                items:
+                  type: object
+                  properties:
+                    graded_by:
+                      type: string
+                    grade:
+                      type: string
     Chapter:
       properties:
         bookNumber:
