@@ -92,9 +92,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Book"
+                $ref: "#/components/schemas/Book"
       parameters:
         - in: path
           name: collectionName
@@ -141,6 +139,37 @@ paths:
             type: string
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/page"
+  "/collections/{collectionName}/books/{bookNumber}/chapters/{chapterId}":
+    get:
+      summary: Get a chapter of a book for a collection
+      description: ""
+      responses:
+        "200":
+          description: A chapter of a book for a collection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chapter"
+      parameters:
+        - in: path
+          name: collectionName
+          description: Name of the collection
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: bookNumber
+          description: Number of the book
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: chapterId
+          description: Number of the book
+          required: true
+          schema:
+            type: number
+            format: float
   "/collections/{collectionName}/books/{bookNumber}/hadiths":
     get:
       summary: Get the list of hadith of a book for a collection
