@@ -94,7 +94,9 @@ class Chapter(db.Model):
 class Hadith(db.Model):
     __tablename__ = "HadithTable"
 
-    rel_collection = db.relationship("HadithCollection", primaryjoin="Hadith.collection == HadithCollection.name", foreign_keys="Hadith.collection", lazy="joined")
+    rel_collection = db.relationship(
+        "HadithCollection", primaryjoin="Hadith.collection == HadithCollection.name", foreign_keys="Hadith.collection", lazy="joined"
+    )
 
     def serialize(self):
         grades = {"en": [], "ar": []}
