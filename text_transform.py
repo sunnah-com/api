@@ -29,21 +29,21 @@ def fix_html(text, remove_wrapper=False):
 
 def standardize_terms(text):
     terms = [
-        "PBUH",
-        "P.B.U.H.",
-        "peace_be_upon_him",
-        "(may peace be upon him)",
-        "(saws)",
-        "(SAW)",
-        "(saw)",
+        ("PBUH", "\ufdfa"),
+        ("P.B.U.H.", "\ufdfa"),
+        ("peace_be_upon_him", "\ufdfa"),
+        ("(may peace be upon him)", "(\ufdfa)"),
+        ("(saws)", "(\ufdfa)"),
+        ("(SAW)", "(\ufdfa)"),
+        ("(saw)", "(\ufdfa)"),
+        ("he Apostle of Allah", "he Messenger of Allah"),
+        ("he Apostle of Allaah", "he Messenger of Allah"),
+        ("Allah's Apostle", "Allah's Messenger"),
+        ("he Holy Prophet ", "he Prophet "),
     ]
-    for term in terms:
-        text = text.replace(term, "(\ufdfa)")
 
-    text = text.replace("he Apostle of Allah", "he Messenger of Allah")
-    text = text.replace("he Apostle of Allaah", "he Messenger of Allah")
-    text = text.replace("Allah's Apostle", "Allah's Messenger")
-    text = text.replace("he Holy Prophet ", "he Prophet ")
+    for old, new in terms:
+        text = text.replace(old, new)
 
     text = re.sub(r"Allah\'s Messenger (?!\()", "Allah's Messenger (\ufdfa) ", text)
     text = re.sub(r"he Messenger of Allah (?!\()", "he Messenger of Allah (\ufdfa) ", text)
