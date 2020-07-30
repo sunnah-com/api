@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-* **Please tell us about yourself:**
+* **Please tell us about yourself (include an email address):**
   <!-- Please provide your name and email address -->
 
 
