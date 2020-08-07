@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from main import app
 from text_transform import cleanup_text, cleanup_en_text, cleanup_chapter_title
+import json
+
 
 db = SQLAlchemy(app)
 db.reflect()
@@ -98,12 +100,21 @@ class Hadith(db.Model):
         "HadithCollection", primaryjoin="Hadith.collection == HadithCollection.name", foreign_keys="Hadith.collection", lazy="joined"
     )
 
+    def get_grade(self, field_name):
+        grade_val = getattr(self, field_name)
+        if not grade_val:
+            return []
+
+        # If the field has a json value, return it
+        # Otherwise build same data structure from individual string fields
+        try:
+            vals = json.loads(grade_val)
+            return [dict((k, x[k]) for k in ("graded_by", "grade")) for x in vals]
+        except ValueError:
+            return [{"graded_by": getattr(self.rel_collection, field_name), "grade": grade_val}]
+
     def serialize(self):
-        grades = {"en": [], "ar": []}
-        if self.englishgrade1:
-            grades["en"] = [{"graded_by": self.rel_collection.englishgrade1, "grade": self.englishgrade1}]
-        if self.arabicgrade1:
-            grades["ar"] = [{"graded_by": self.rel_collection.arabicgrade1, "grade": self.arabicgrade1}]
+        grades = {"en": self.get_grade("englishgrade1"), "ar": self.get_grade("arabicgrade1")}
 
         return {
             "collection": self.collection,
