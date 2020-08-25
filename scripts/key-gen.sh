@@ -19,3 +19,6 @@ KEYVALUE=`echo ${KEYINFO} | grep value | cut -d\" -f8`
 aws apigateway create-usage-plan-key --usage-plan-id b3rk95 --key-type API_KEY --key-id ${KEYID} --region us-west-2 2>&1
 echo -e "\nNew key successfully created: ${KEYVALUE}"
 
+if [ -f "apimail.php" ]; then
+	php apimail.php ${KEYNAME} ${KEYVALUE}
+fi
