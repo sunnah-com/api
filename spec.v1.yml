@@ -203,6 +203,30 @@ paths:
             type: string
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/page"
+  "/collections/{collectionName}/books/{bookNumber}/hadiths/random":
+    get:
+      summary: Get a randomly selected hadith of a book for a collection
+      description: ""
+      responses:
+        "200":
+          description: Randomly selected hadith of a book for a collection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hadith"
+      parameters:
+        - in: path
+          name: collectionName
+          description: Name of the collection
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: bookNumber
+          description: Number of the book
+          required: true
+          schema:
+            type: string
   "/collections/{collectionName}/hadiths/{hadithNumber}":
     get:
       summary: Get a hadith of a collection
@@ -224,6 +248,24 @@ paths:
         - in: path
           name: hadithNumber
           description: Number of the hadith
+          required: true
+          schema:
+            type: string
+  "/collections/{collectionName}/hadiths/random":
+    get:
+      summary: Get a randomly selected hadith of a collection
+      description: ""
+      responses:
+        "200":
+          description: Randomly selected hadith of a collection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hadith"
+      parameters:
+        - in: path
+          name: collectionName
+          description: Name of the collection
           required: true
           schema:
             type: string

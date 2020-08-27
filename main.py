@@ -88,10 +88,22 @@ def api_collection_book_hadiths(collection_name, bookNumber):
     return Hadith.query.filter_by(collection=collection_name, bookNumber=bookNumber).order_by(Hadith.englishURN)
 
 
+@app.route("/v1/collections/<string:collection_name>/books/<string:bookNumber>/hadiths/random", methods=["GET"])
+@single_resource
+def api_collection_book_hadiths_random(collection_name, bookNumber):
+    return Hadith.query.filter_by(collection=collection_name, bookNumber=bookNumber).order_by(func.rand())
+
+
 @app.route("/v1/collections/<string:collection_name>/hadiths/<string:hadithNumber>", methods=["GET"])
 @single_resource
 def api_collection_hadith(collection_name, hadithNumber):
     return Hadith.query.filter_by(collection=collection_name, hadithNumber=hadithNumber)
+    
+
+@app.route("/v1/collections/<string:collection_name>/hadiths/random", methods=["GET"])
+@single_resource
+def api_collection_hadith_random(collection_name):
+    return Hadith.query.filter_by(collection=collection_name).order_by(func.rand())
 
 
 @app.route("/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters", methods=["GET"])
