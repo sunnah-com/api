@@ -9,6 +9,8 @@ services:
     env_file:
       - .env.local
   web:
+    depends_on:
+      - "db"
     build: .
     command: flask run --host=0.0.0.0
     volumes:
