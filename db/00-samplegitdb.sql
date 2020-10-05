@@ -140,7 +140,7 @@ DROP TABLE IF EXISTS `Collections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Collections` (
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `collectionID` int(11) NOT NULL,
   `type` varchar(30) NOT NULL,
   `englishTitle` varchar(200) NOT NULL,
