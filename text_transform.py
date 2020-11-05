@@ -28,6 +28,12 @@ def fix_html(text, remove_wrapper=False):
 
 
 def standardize_terms(text):
+    """
+    Standardize terms.
+
+    Args:
+        text: (str): write your description
+    """
     terms = [
         ("PBUH", "\ufdfa"),
         ("P.B.U.H.", "\ufdfa"),
@@ -64,6 +70,12 @@ def fix_hyperlinks(text):
 
 
 def cleanup_text(text):
+    """
+    Cleanup text from a string.
+
+    Args:
+        text: (str): write your description
+    """
     if not text:
         return text
     text = re.sub(r"\n+", "\n", text)
@@ -75,6 +87,12 @@ def cleanup_text(text):
 
 
 def cleanup_en_text(text):
+    """
+    Strized text.
+
+    Args:
+        text: (str): write your description
+    """
     if not text:
         return text
     text = cleanup_text(text)
@@ -83,6 +101,12 @@ def cleanup_en_text(text):
 
 
 def cleanup_chapter_title(text):
+    """
+    Strips the title.
+
+    Args:
+        text: (str): write your description
+    """
     if not text:
         return text
     text = re.sub(r"\n+", "\n", text)
@@ -93,6 +117,12 @@ def cleanup_chapter_title(text):
     return text
 
 def cleanup_en_chapter_title(text):
+    """
+    Cleanup the title.
+
+    Args:
+        text: (str): write your description
+    """
     if not text:
         return text
     text = cleanup_chapter_title(text)

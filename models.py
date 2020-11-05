@@ -9,6 +9,12 @@ db.reflect()
 
 
 def is_number(s):
+    """
+    Returns true if s is a number false otherwise.
+
+    Args:
+        s: (int): write your description
+    """
     try:
         int(s)
         return True
@@ -20,6 +26,12 @@ class HadithCollection(db.Model):
     __tablename__ = "Collections"
 
     def serialize(self):
+        """
+        Serialize the object as a dict.
+
+        Args:
+            self: (todo): write your description
+        """
         return {
             "name": self.name,
             "hasBooks": self.hasbooks == "yes",
@@ -40,12 +52,24 @@ class Book(db.Model):
 
     @staticmethod
     def get_number_from_id(book_id):
+        """
+        Return the number of a book.
+
+        Args:
+            book_id: (str): write your description
+        """
         # Logic for dealing with non-straightforward ourBookIDs
         book_number = Book.id_number_map.get(book_id, int(book_id))
         return str(book_number)
 
     @staticmethod
     def get_id_from_number(book_number):
+        """
+        Return the id of a book.
+
+        Args:
+            book_number: (int): write your description
+        """
         number_id_map = {v: k for k, v in Book.id_number_map.items()}
 
         if is_number(book_number):
@@ -56,6 +80,12 @@ class Book(db.Model):
         return str(book_id)
 
     def serialize(self):
+        """
+        Serialize a dictionary as a serialized bookmark.
+
+        Args:
+            self: (todo): write your description
+        """
         bookNumber = Book.get_number_from_id(self.ourBookID)
         return {
             "bookNumber": bookNumber,
@@ -70,6 +100,12 @@ class Chapter(db.Model):
     __tablename__ = "ChapterData"
 
     def serialize(self):
+        """
+        Serialize the markdown representation.
+
+        Args:
+            self: (todo): write your description
+        """
         bookNumber = Book.get_number_from_id(self.arabicBookID)
         return {
             "bookNumber": bookNumber,
@@ -101,6 +137,13 @@ class Hadith(db.Model):
     )
 
     def get_grade(self, field_name):
+        """
+        Return the grade object
+
+        Args:
+            self: (todo): write your description
+            field_name: (str): write your description
+        """
         grade_val = getattr(self, field_name)
         if not grade_val:
             return []
@@ -114,6 +157,12 @@ class Hadith(db.Model):
             return [{"graded_by": getattr(self.rel_collection, field_name), "grade": grade_val}]
 
     def serialize(self):
+        """
+        Serialize the grade as a dict.
+
+        Args:
+            self: (todo): write your description
+        """
         grades = {"en": self.get_grade("englishgrade1"), "ar": self.get_grade("arabicgrade1")}
 
         return {
