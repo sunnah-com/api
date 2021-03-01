@@ -117,7 +117,7 @@ def api_hadith(urn):
 @single_resource
 def api_hadiths_random():
     # TODO Make this configurable instead of hardcoding
-    return Hadith.query.filter_by(collection="riyadussaliheen").order_by(func.rand())
+    return Hadith.query.filter_by(collection="riyadussalihin").order_by(func.rand())
 
 
 if __name__ == "__main__":
