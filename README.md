@@ -63,3 +63,14 @@ flake8 .
 ```
 
 To add more rules for linting and formatting, make changes to `.flake8` and `pyproject.toml` accordingly.
+
+# Guidelines for Sending a Pull Request
+
+1. Only change one thing at a time.
+2. Don't mix a lot of formatting changes with logic change in the same pull request.
+3. Keep code refactor and logic change in separate pull requests.
+4. Squash your commits. When you address feedback, squash it as well. No one benefits from "addressed feedback" commit in the history.
+5. Break down bigger changes into smaller separate pull requests.
+6. If changing UI, attach a screenshot of how the changes look.
+7. Reference the issue being fixed by adding the issue tag in the commit message.
+8. Do not send a big change before first proposing it and getting a buy-in from the maintainer.
