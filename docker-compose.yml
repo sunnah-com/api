@@ -2,10 +2,10 @@ version: '3'
 
 services:
   db:
-    image: mysql:5.7.22
+    image: mysql:9.1.0
     command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - ./db:/docker-entrypoint-initdb.d/:ro
+      - ./db:/docker-entrypoint-initdb.d/
     env_file:
       - .env.local
   web:
