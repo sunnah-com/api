@@ -227,48 +227,6 @@ paths:
           required: true
           schema:
             type: string
-  /hadiths:
-    get:
-      summary: Get a list of hadiths
-      description: ""
-      responses:
-        "200":
-          description: Paginated list of hadiths
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/Hadith"
-                  - $ref: "#/components/schemas/PaginatedResponse"
-      parameters:
-        - in: query
-          name: collection
-          description: Name of the collection
-          schema:
-            type: string
-        - in: query
-          name: bookNumber
-          description: Number of the book
-          schema:
-            type: string
-        - in: query
-          name: chapterId
-          description: ID of the chapter
-          schema:
-            type: number
-            format: float
-        - in: query
-          name: hadithNumber
-          description: Hadith number
-          schema:
-            type: string
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/page"
   "/hadiths/{urn}":
     get:
       summary: Get a hadith by its URN
