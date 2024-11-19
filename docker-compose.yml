@@ -8,8 +8,6 @@ services:
       - ./db:/docker-entrypoint-initdb.d/:ro
     env_file:
       - .env.local
-    ports:
-      - "3306:3306"
   web:
     depends_on:
       - "db"
