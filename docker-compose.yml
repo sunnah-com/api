@@ -11,7 +11,7 @@ services:
       - "3306:3306"
   web:
     depends_on:
-      - "db"
+      - db
     build: .
     command: flask run --host=0.0.0.0
     volumes:
