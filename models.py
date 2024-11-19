@@ -5,7 +5,8 @@ import json
 
 
 db = SQLAlchemy(app)
-db.reflect()
+with app.app_context():
+    db.reflect()
 
 
 def is_number(s):
