@@ -1,16 +1,12 @@
 SET FOREIGN_KEY_CHECKS=0;
 
-SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
-SET @@SESSION.SQL_LOG_BIN= 0;
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `AppErrorReport`;
 CREATE TABLE `AppErrorReport` (
   `englishURN` int NOT NULL,
-  `details` text CHARACTER SET latin1 NOT NULL,
-  `ipAddress` text CHARACTER SET latin1,
+  `details` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `ipAddress` text CHARACTER SET latin1 COLLATE latin1_swedish_ci,
   `dateOfSubmission` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -27,26 +23,24 @@ SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `ArabicHadithTable`;
 CREATE TABLE `ArabicHadithTable` (
   `arabicURN` int NOT NULL DEFAULT '0',
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `volumeNumber` int NOT NULL,
   `bookNumber` int NOT NULL,
   `babNumber` decimal(6,2) DEFAULT NULL,
-  `hadithNumber` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `bookName` varchar(200) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `babName` varchar(1000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `hadithText` mediumtext COLLATE utf8mb3_unicode_ci,
-  `annotations` text COLLATE utf8mb3_unicode_ci,
+  `hadithNumber` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `bookName` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `babName` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `hadithText` mediumtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `annotations` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `bookID` decimal(3,1) NOT NULL,
-  `grade1` text COLLATE utf8mb3_unicode_ci,
+  `grade1` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `ourHadithNumber` int NOT NULL,
   `matchingEnglishURN` int NOT NULL,
   `last_updated` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`arabicURN`),
   UNIQUE KEY `arabicURN` (`arabicURN`),
-  KEY `matchingEnglishURN` (`matchingEnglishURN`),
-  KEY `idx_collection_bookID_arabicURN` (`collection`,`bookID`,`arabicURN`)
+  KEY `matchingEnglishURN` (`matchingEnglishURN`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -63,24 +57,23 @@ SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `BanglaHadithTable`;
 CREATE TABLE `BanglaHadithTable` (
   `banglaURN` int NOT NULL DEFAULT '0',
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `volumeNumber` int NOT NULL,
   `bookNumber` int NOT NULL,
-  `bookName` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `bookName` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `babNumber` int DEFAULT NULL,
-  `babName` varchar(1000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `babName` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `hadithNumber` int NOT NULL,
-  `hadithSanad` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `hadithText` text COLLATE utf8mb3_unicode_ci,
+  `hadithSanad` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `hadithText` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `bookID` decimal(3,1) NOT NULL,
-  `grade` varchar(200) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `comments` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `grade` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `comments` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ourHadithNumber` int NOT NULL,
   `matchingArabicURN` int NOT NULL,
   `last_updated` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`banglaURN`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -96,28 +89,28 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `BookData`;
 CREATE TABLE `BookData` (
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `englishBookID` decimal(3,1) NOT NULL DEFAULT '0.0',
   `englishBookNumber` int NOT NULL,
-  `englishBookName` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `englishBookIntro` text COLLATE utf8mb3_unicode_ci,
+  `englishBookName` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `englishBookIntro` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `arabicBookID` decimal(3,1) DEFAULT NULL,
   `arabicBookNumber` int NOT NULL,
-  `arabicBookName` varchar(300) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `arabicBookIntro` text COLLATE utf8mb3_unicode_ci,
+  `arabicBookName` varchar(300) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `arabicBookIntro` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `indonesianBookID` decimal(3,1) DEFAULT NULL,
   `indonesianBookNum` int NOT NULL,
-  `indonesianBookName` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `indonesianBookName` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `urduBookID` decimal(3,1) DEFAULT NULL,
   `urduBookNum` int NOT NULL,
-  `urduBookName` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urduBookName` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `banglaBookID` decimal(3,1) DEFAULT NULL,
   `banglaBookNum` int NOT NULL,
-  `banglaBookName` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `banglaBookName` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ourBookID` int NOT NULL,
-  `ourBookNum` tinytext COLLATE utf8mb3_unicode_ci,
-  `linkpath` tinytext COLLATE utf8mb3_unicode_ci,
-  `reference_template` tinytext COLLATE utf8mb3_unicode_ci,
+  `ourBookNum` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `linkpath` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `reference_template` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `firstNumber` int NOT NULL,
   `lastNumber` int NOT NULL,
   `firstURN` int DEFAULT NULL,
@@ -129,7 +122,6 @@ CREATE TABLE `BookData` (
   PRIMARY KEY (`collection`,`ourBookID`),
   KEY `collection` (`collection`,`ourBookID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -145,22 +137,21 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `ChapterData`;
 CREATE TABLE `ChapterData` (
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `englishBookID` decimal(3,1) NOT NULL DEFAULT '0.0',
   `arabicBookID` decimal(3,1) NOT NULL DEFAULT '0.0',
   `babID` decimal(6,2) NOT NULL,
-  `arabicBabNumber` varchar(21) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `englishBabNumber` varchar(21) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `englishBabName` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `arabicBabName` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `arabicIntro` text COLLATE utf8mb3_unicode_ci,
-  `englishIntro` text COLLATE utf8mb3_unicode_ci,
-  `arabicEnding` text COLLATE utf8mb3_unicode_ci,
-  `englishEnding` text COLLATE utf8mb3_unicode_ci,
+  `arabicBabNumber` varchar(21) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `englishBabNumber` varchar(21) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `englishBabName` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `arabicBabName` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `arabicIntro` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `englishIntro` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `arabicEnding` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `englishEnding` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   PRIMARY KEY (`collection`,`arabicBookID`,`babID`),
   KEY `collection` (`collection`,`arabicBookID`,`babID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -176,37 +167,39 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `Collections`;
 CREATE TABLE `Collections` (
-  `name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `collectionID` int NOT NULL,
-  `type` varchar(30) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `englishTitle` varchar(200) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `arabicTitle` varchar(400) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `hasvolumes` varchar(3) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `hasbooks` varchar(3) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `haschapters` varchar(3) COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'yes',
+  `type` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `englishTitle` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `arabicTitle` varchar(400) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `hasvolumes` varchar(3) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `hasbooks` varchar(3) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `haschapters` varchar(3) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'yes',
   `numhadith` int NOT NULL,
   `totalhadith` int DEFAULT NULL,
-  `englishgrade1` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `arabicgrade1` varchar(200) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `showEnglishTranslationNumber` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'yes',
+  `englishgrade1` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `arabicgrade1` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `showEnglishTranslationNumber` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'yes',
   `showInBookReference` tinyint(1) NOT NULL DEFAULT '1',
   `showOnHome` tinyint(1) NOT NULL DEFAULT '1',
   `showTranslationProgress` tinyint NOT NULL DEFAULT '0',
-  `reference_template` tinytext COLLATE utf8mb3_unicode_ci,
-  `annotation` varchar(300) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `shortintro` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `about` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `status` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `numberinginfodesc` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `reference_template` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `annotation` varchar(300) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `shortintro` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `about` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `numberinginfodesc` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `includesBooks` tinyint(1) DEFAULT NULL,
+  `includesChapters` tinyint(1) DEFAULT NULL,
+  `includesVolumes` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`collectionID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
 
 LOCK TABLES `Collections` WRITE;
-INSERT INTO `Collections` VALUES ('bukhari',1,'collection','Sahih al-Bukhari','صحيح البخاري','yes','yes','yes',7277,7291,NULL,'','yes',1,1,0,NULL,'<font color=green>(complete)</font>','Sahih al-Bukhari is a collection of hadith compiled by Imam Muhammad al-Bukhari (d. 256 AH/870 AD) (rahimahullah).\r\n\r\nHis collection is recognized by the overwhelming majority of the Muslim world to be the most authentic collection of reports of the <i>Sunnah</i> of the Prophet Muhammad (ﷺ). It contains over 7500 hadith (with repetitions) in 97 books.\r\n\r\nThe translation provided here is by Dr. M. Muhsin Khan.','Now included from file. This should not be visible on the website.','complete','The numbering below corresponds with Shaykh Muhammad Fuad `Abd al-Baqi\'s (rahimahullah) numbering scheme.'),('muslim',2,'collection','Sahih Muslim','صحيح مسلم','no','yes','yes',7459,7470,NULL,'','yes',1,1,0,NULL,'<font color=green>(complete)</font>','Sahih Muslim is a collection of hadith compiled by Imam Muslim ibn al-Hajjaj al-Naysaburi (rahimahullah).\r\nHis collection is considered to be one of the most authentic\r\ncollections of the Sunnah of the Prophet (ﷺ), and along with\r\nSahih al-Bukhari forms the \"Sahihain,\" or the \"Two Sahihs.\"\r\nIt contains roughly 7500 hadith (with repetitions) in 57 books.\r\n<br>\r\nThe translation provided here is by Abdul Hamid Siddiqui.','','complete','The numbering below corresponds with Shaykh Muhammad Fuad `Abd al-Baqi\'s (rahimahullah) numbering scheme.'),('malik',40,'collection','Muwatta Malik',' موطأ مالك','no','yes','yes',1973,1973,NULL,'','yes',1,1,0,NULL,'(<font color=green>complete</font>)','','','complete','');
+INSERT INTO `Collections` VALUES ('bukhari',1,'collection','Sahih al-Bukhari','صحيح البخاري','yes','yes','yes',7277,7291,NULL,'','yes',1,1,0,NULL,'<font color=green>(complete)</font>','Sahih al-Bukhari is a collection of hadith compiled by Imam Muhammad al-Bukhari (d. 256 AH/870 AD) (rahimahullah).\r\n\r\nHis collection is recognized by the overwhelming majority of the Muslim world to be the most authentic collection of reports of the <i>Sunnah</i> of the Prophet Muhammad (ﷺ). It contains over 7500 hadith (with repetitions) in 97 books.\r\n\r\nThe translation provided here is by Dr. M. Muhsin Khan.','Now included from file. This should not be visible on the website.','complete','The numbering below corresponds with Shaykh Muhammad Fuad `Abd al-Baqi\'s (rahimahullah) numbering scheme.',1,1,1),('muslim',2,'collection','Sahih Muslim','صحيح مسلم','no','yes','yes',7459,7470,NULL,'','yes',1,1,0,NULL,'<font color=green>(complete)</font>','Sahih Muslim is a collection of hadith compiled by Imam Muslim ibn al-Hajjaj al-Naysaburi (rahimahullah).\r\nHis collection is considered to be one of the most authentic\r\ncollections of the Sunnah of the Prophet (ﷺ), and along with\r\nSahih al-Bukhari forms the \"Sahihain,\" or the \"Two Sahihs.\"\r\nIt contains roughly 7500 hadith (with repetitions) in 57 books.\r\n<br>\r\nThe translation provided here is by Abdul Hamid Siddiqui.','','complete','The numbering below corresponds with Shaykh Muhammad Fuad `Abd al-Baqi\'s (rahimahullah) numbering scheme.',1,1,0),('malik',40,'collection','Muwatta Malik',' موطأ مالك','no','yes','yes',1973,1973,NULL,'','yes',1,1,0,NULL,'(<font color=green>complete</font>)','','','complete','',1,1,0);
 UNLOCK TABLES;
 
 
@@ -217,27 +210,25 @@ SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `EnglishHadithTable`;
 CREATE TABLE `EnglishHadithTable` (
   `englishURN` int NOT NULL DEFAULT '0',
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `volumeNumber` int NOT NULL,
   `bookNumber` int NOT NULL,
-  `bookName` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `bookName` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `babNumber` decimal(6,2) DEFAULT NULL,
-  `babName` varchar(1000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `babName` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `hadithNumber` int NOT NULL,
-  `hadithText` text COLLATE utf8mb3_unicode_ci,
+  `hadithText` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `bookID` decimal(3,1) NOT NULL,
-  `grade1` text COLLATE utf8mb3_unicode_ci,
-  `grade2` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `comments` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `grade1` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `grade2` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `comments` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ourHadithNumber` int NOT NULL,
   `matchingArabicURN` int NOT NULL,
   `last_updated` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`englishURN`),
   UNIQUE KEY `englishURN_2` (`englishURN`),
-  KEY `englishURN` (`englishURN`),
-  KEY `idx_collection_bookID_englishURN` (`collection`,`bookID`,`englishURN`)
+  KEY `englishURN` (`englishURN`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -253,30 +244,29 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `HadithTable`;
 CREATE TABLE `HadithTable` (
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `bookNumber` varchar(20) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `bookNumber` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `babID` decimal(6,2) NOT NULL,
-  `englishBabNumber` varchar(21) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `arabicBabNumber` varchar(21) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `hadithNumber` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `englishBabNumber` varchar(21) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `arabicBabNumber` varchar(21) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `hadithNumber` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ourHadithNumber` int NOT NULL,
   `arabicURN` int NOT NULL,
-  `arabicBabName` text COLLATE utf8mb3_unicode_ci,
-  `arabicText` text COLLATE utf8mb3_unicode_ci,
-  `arabicgrade1` varchar(2000) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `arabicBabName` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `arabicText` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `arabicgrade1` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `englishURN` int NOT NULL,
-  `englishBabName` text COLLATE utf8mb3_unicode_ci,
-  `englishText` text COLLATE utf8mb3_unicode_ci,
-  `englishgrade1` varchar(2000) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `englishBabName` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `englishText` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `englishgrade1` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `last_updated` timestamp NULL DEFAULT NULL,
-  `xrefs` varchar(1000) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `xrefs` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`arabicURN`),
   UNIQUE KEY `arabicURN` (`arabicURN`),
   UNIQUE KEY `englishURN` (`englishURN`),
   KEY `colbook` (`collection`,`bookNumber`),
   KEY `hadithNumber` (`hadithNumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -293,17 +283,17 @@ SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `IndonesianHadithTable`;
 CREATE TABLE `IndonesianHadithTable` (
   `indonesianURN` int NOT NULL DEFAULT '0',
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `volumeNumber` int NOT NULL,
   `bookNumber` int NOT NULL,
-  `bookName` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `bookName` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `babNumber` int DEFAULT NULL,
-  `babName` varchar(1000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `babName` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `hadithNumber` int NOT NULL,
-  `hadithText` varchar(20000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `hadithText` varchar(20000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `bookID` decimal(3,1) NOT NULL,
-  `grade` varchar(200) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `comments` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `grade` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `comments` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ourHadithNumber` int NOT NULL,
   `matchingArabicURN` int NOT NULL,
   `last_updated` timestamp NULL DEFAULT NULL,
@@ -311,7 +301,6 @@ CREATE TABLE `IndonesianHadithTable` (
   UNIQUE KEY `indonesianURN` (`indonesianURN`),
   KEY `englishURN` (`indonesianURN`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -331,36 +320,35 @@ CREATE TABLE `Narrators` (
   `NewID` int NOT NULL,
   `Age` smallint NOT NULL,
   `RawiRank` smallint NOT NULL,
-  `DateOfBirth` tinytext COLLATE utf8mb3_unicode_ci,
-  `BaladEkama` text COLLATE utf8mb3_unicode_ci,
-  `BaladWafa` text COLLATE utf8mb3_unicode_ci,
+  `DateOfBirth` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `BaladEkama` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `BaladWafa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `Bokhary` tinyint(1) NOT NULL,
   `Moslem` tinyint(1) NOT NULL,
-  `DeathYear` tinytext COLLATE utf8mb3_unicode_ci,
-  `Karaba` text COLLATE utf8mb3_unicode_ci,
-  `Konya` tinytext COLLATE utf8mb3_unicode_ci,
-  `Lakab` tinytext COLLATE utf8mb3_unicode_ci,
-  `Mawaaly` tinytext COLLATE utf8mb3_unicode_ci,
-  `Mazhab` tinytext COLLATE utf8mb3_unicode_ci,
-  `Name` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `Badeel` text COLLATE utf8mb3_unicode_ci,
-  `Nasab` text COLLATE utf8mb3_unicode_ci,
-  `Shohra` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `San3a` text COLLATE utf8mb3_unicode_ci,
+  `DeathYear` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Karaba` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Konya` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Lakab` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Mawaaly` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Mazhab` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `Badeel` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Nasab` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `Shohra` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `San3a` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `Tabaka` smallint NOT NULL,
-  `Wasf` tinytext COLLATE utf8mb3_unicode_ci,
-  `WasfRotba` tinytext COLLATE utf8mb3_unicode_ci,
+  `Wasf` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `WasfRotba` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `Rotba` int NOT NULL,
   `Tadleese` tinyint(1) NOT NULL,
   `E5telat` tinyint(1) NOT NULL,
-  `CommonName` text COLLATE utf8mb3_unicode_ci,
+  `CommonName` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `Marweyaat` int NOT NULL,
   `IsMale` tinyint(1) NOT NULL,
   `DisplayID` int NOT NULL,
-  `MarweyaatCountSymbol` tinytext COLLATE utf8mb3_unicode_ci,
+  `MarweyaatCountSymbol` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -377,25 +365,24 @@ SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '';
 DROP TABLE IF EXISTS `UrduHadithTable`;
 CREATE TABLE `UrduHadithTable` (
   `urduURN` int NOT NULL DEFAULT '0',
-  `collection` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `collection` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `volumeNumber` int NOT NULL,
   `bookNumber` int NOT NULL,
-  `bookName` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `bookName` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `babNumber` int DEFAULT NULL,
-  `babName` varchar(1000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `babName` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `hadithNumber` int NOT NULL,
-  `hadithSanad` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `hadithText` text COLLATE utf8mb3_unicode_ci,
+  `hadithSanad` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `hadithText` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `bookID` decimal(3,1) NOT NULL,
-  `grade` varchar(200) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `comments` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `grade` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `comments` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ourHadithNumber` int NOT NULL,
   `matchingArabicURN` int NOT NULL,
   `last_updated` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`urduURN`),
   KEY `englishURN` (`urduURN`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
@@ -420,7 +407,6 @@ CREATE TABLE `matchtable` (
   PRIMARY KEY (`arabicURN`,`englishURN`),
   KEY `arabicURN` (`arabicURN`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
-SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 
 
 
