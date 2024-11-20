@@ -1,7 +1,7 @@
 appdirs==1.4.4
 astroid==2.4.1
 attrs==19.3.0
-black==19.10b0
+black==24.3.0
 cfgv==3.1.0
 click==7.1.2
 colorama==0.4.3
