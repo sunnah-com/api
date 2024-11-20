@@ -5,7 +5,8 @@ import json
 
 
 db = SQLAlchemy(app)
-db.reflect()
+with app.app_context():
+    db.reflect()
 
 
 def is_number(s):
@@ -22,8 +23,8 @@ class HadithCollection(db.Model):
     def serialize(self):
         return {
             "name": self.name,
-            "hasBooks": self.hasbooks == "yes",
-            "hasChapters": self.haschapters == "yes",
+            "hasBooks": self.includesBooks,
+            "hasChapters": self.includesChapters,
             "collection": [
                 {"lang": "en", "title": self.englishTitle, "shortIntro": self.shortintro},
                 {"lang": "ar", "title": self.arabicTitle, "shortIntro": self.shortIntroArabic if hasattr(self, "shortIntroArabic") else self.shortintro},
