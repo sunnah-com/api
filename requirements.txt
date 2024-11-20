@@ -24,7 +24,7 @@ pathspec==0.8.0
 pycodestyle==2.6.0
 pyflakes==2.2.0
 pylint==2.5.2
-PyMySQL==0.9.3
+PyMySQL==1.1.1
 python-dotenv==0.13.0
 PyYAML==5.4
 regex==2020.6.8
