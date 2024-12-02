@@ -1,6 +1,6 @@
 # Overview
 
-The official API of sunnah.com for retrieving information about hadith collections. 
+The official API of sunnah.com for retrieving information about hadith collections.
 
 # Getting started
 
@@ -47,7 +47,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ## Routes
 
-Visit https://sunnah.api-docs.io/ for full API documentation.
+Visit https://sunnah.stoplight.io/docs/api/ for full API documentation.
 
 ## Linting and Formatting
 

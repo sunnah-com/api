@@ -92,6 +92,7 @@ def cleanup_chapter_title(text):
     text = text.strip()
     return text
 
+
 def cleanup_en_chapter_title(text):
     if not text:
         return text
