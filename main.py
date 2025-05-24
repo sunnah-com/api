@@ -107,6 +107,32 @@ def api_collection_book_chapter(collection_name, bookNumber, chapterId):
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId)
 
 
+@app.route("/v1/hadiths", methods=["GET"])
+@paginate_results
+def api_hadiths():
+    query = Hadith.query
+
+    # Apply filters based on query parameters
+    collection = request.args.get("collection")
+    if collection:
+        query = query.filter_by(collection=collection)
+
+    book_number = request.args.get("bookNumber")
+    if book_number:
+        query = query.filter_by(bookNumber=book_number)
+
+    chapter_id = request.args.get("chapterId")
+    if chapter_id:
+        query = query.filter_by(babID=float(chapter_id))
+
+    hadith_number = request.args.get("hadithNumber")
+    if hadith_number:
+        query = query.filter_by(hadithNumber=hadith_number)
+
+    # Order by URN for consistent results
+    return query.order_by(Hadith.englishURN)
+
+
 @app.route("/v1/hadiths/<int:urn>", methods=["GET"])
 @single_resource
 def api_hadith(urn):
