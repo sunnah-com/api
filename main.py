@@ -1,7 +1,11 @@
 import functools
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort,Response, make_response, render_template_string
 from sqlalchemy import func, or_
 from werkzeug.exceptions import HTTPException
+import csv
+from io import StringIO
+
+from weasyprint import HTML
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
@@ -145,6 +149,48 @@ def api_hadiths_random():
     # TODO Make this configurable instead of hardcoding
     return Hadith.query.filter_by(collection="riyadussalihin").order_by(func.rand())
 
+
+
+#CSV EXPORT 
+@app.route("/v1/collections/export/csv", methods=["GET"])
+def export_collections_csv():
+    collections = HadithCollection.query.all()
+    si = StringIO()
+    writer = csv.writer(si)
+    writer.writerow(["Collection ID", "Name", "Description"])
+    for collection in collections:
+        writer.writerow([collection.collectionID, collection.name, collection.description])
+    
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=collections.csv"
+    output.headers["Content-Type"] = "text/csv"
+    return output
+
+#PDF export
+@app.route("/v1/collections/export/pdf", methods=["GET"])
+def export_collections_pdf():
+    collections = HadithCollection.query.all()
+    html_content = render_template_string(
+        """
+        <!DOCTYPE html>
+        <html>
+        <head><title>Collections</title></head>
+        <body>
+        <h1>Hadith Collections</h1>
+        <ul>
+            {% for collection in collections %}
+                <li>{{ collection.name }}: {{ collection.description }}</li>
+            {% endfor %}
+        </ul>
+        </body>
+        </html>
+        """, collections=collections
+    )
+    pdf = HTML(string=html_content).write_pdf()
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=collections.pdf"
+    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

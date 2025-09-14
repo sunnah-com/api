@@ -36,3 +36,4 @@ virtualenv==20.0.25
 Werkzeug==3.0.6
 wrapt==1.12.1
 zipp==3.19.1
+weasyprint == 63.0
