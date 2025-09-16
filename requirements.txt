@@ -14,7 +14,7 @@ identify==1.4.20
 importlib-metadata==1.7.0
 isort==4.3.21
 itsdangerous==1.1.0
-Jinja2==3.1.4
+Jinja2==3.1.6
 lazy-object-proxy==1.4.3
 lxml==4.9.1
 MarkupSafe==1.1.1
