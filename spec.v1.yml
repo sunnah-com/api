@@ -16,6 +16,19 @@ info:
 security:
   - APIKey: []
 paths:
+  /:
+    get:
+      summary: API welcome page
+      description: Returns a welcome message (HTML) for the API root
+      responses:
+        "200":
+          description: Welcome page
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<h1>Welcome to sunnah.com API.</h1>"
+      security: []
   /collections:
     get:
       summary: Get the list of collections
