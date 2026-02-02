@@ -23,7 +23,7 @@ flask run --host=0.0.0.0
 Or alternatively use `docker-compose` which will give a full environment with a MySQL instance loaded with a sample dataset:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 * Use `--build` option to re-build.
@@ -42,7 +42,7 @@ Configuration files are located at `env.local` and `uwsgi.ini`.
 A production ready uWSGI daemon (uwsgi socket exposed on port 5001) can be started with:
 
 ```bash
-docker-compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 ## Routes

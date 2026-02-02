@@ -16,6 +16,19 @@ info:
 security:
   - APIKey: []
 paths:
+  /:
+    get:
+      summary: API welcome page
+      description: Returns a welcome message (HTML) for the API root
+      responses:
+        "200":
+          description: Welcome page
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<h1>Welcome to sunnah.com API.</h1>"
+      security: []
   /collections:
     get:
       summary: Get the list of collections
@@ -227,6 +240,48 @@ paths:
           required: true
           schema:
             type: string
+  /hadiths:
+    get:
+      summary: Get a list of hadiths
+      description: ""
+      responses:
+        "200":
+          description: Paginated list of hadiths
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Hadith"
+                  - $ref: "#/components/schemas/PaginatedResponse"
+      parameters:
+        - in: query
+          name: collection
+          description: Name of the collection
+          schema:
+            type: string
+        - in: query
+          name: bookNumber
+          description: Number of the book
+          schema:
+            type: string
+        - in: query
+          name: chapterId
+          description: ID of the chapter
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: hadithNumber
+          description: Hadith number
+          schema:
+            type: string
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/page"
   "/hadiths/{urn}":
     get:
       summary: Get a hadith by its URN
@@ -245,7 +300,43 @@ paths:
           description: English or Arabic URN
           schema:
             type: integer
-  /hadiths/random:
+  "/hadiths/urns":
+    get:
+      summary: Get multiple hadiths by URNs
+      description: >
+        Returns hadiths that match one or more English/Arabic URNs.
+        Provide URNs as a single comma-separated query parameter.
+        Example: ?urns=305,306
+      parameters:
+        - in: query
+          name: urns
+          required: true
+          description: Comma-separated list of English/Arabic URNs (must be provided once).
+          schema:
+            type: string
+            pattern: "^\\d+(,\\d+)*$"
+          example: "305,306"
+      responses:
+        "200":
+          description: A list of hadiths matching the requested URNs.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  missing:
+                    type: array
+                    items:
+                      type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Hadith"
+        "400":
+          description: Bad request (missing/invalid urns)
+  "/hadiths/random":
     get:
       summary: Get a randomly selected hadith
       description: ""

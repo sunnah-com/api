@@ -9,9 +9,17 @@ services:
       - ./db:/docker-entrypoint-initdb.d/:ro
     env_file:
       - .env.local
+    healthcheck:
+      # mysqladmin ping returns 0 if the server is up
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 6s
+      timeout: 5s
+      retries: 5
+      start_period: 4s # Give it time to initialize
   web:
     depends_on:
-      - "db"
+      db:
+        condition: service_healthy
     build: .
     platform: linux/x86_64
     command: flask run --host=0.0.0.0

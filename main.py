@@ -107,10 +107,96 @@ def api_collection_book_chapter(collection_name, bookNumber, chapterId):
     return Chapter.query.filter_by(collection=collection_name, arabicBookID=book_id, babID=chapterId)
 
 
+@app.route("/v1/hadiths", methods=["GET"])
+@paginate_results
+def api_hadiths():
+    query = Hadith.query
+
+    # Apply filters based on query parameters
+    collection = request.args.get("collection")
+    if collection:
+        query = query.filter_by(collection=collection)
+
+    book_number = request.args.get("bookNumber")
+    if book_number:
+        query = query.filter_by(bookNumber=book_number)
+
+    chapter_id = request.args.get("chapterId")
+    if chapter_id:
+        query = query.filter_by(babID=float(chapter_id))
+
+    hadith_number = request.args.get("hadithNumber")
+    if hadith_number:
+        query = query.filter_by(hadithNumber=hadith_number)
+
+    # Order by URN for consistent results
+    return query.order_by(Hadith.englishURN)
+
+
 @app.route("/v1/hadiths/<int:urn>", methods=["GET"])
 @single_resource
 def api_hadith(urn):
     return Hadith.query.filter(or_(Hadith.arabicURN == urn, Hadith.englishURN == urn))
+
+@app.route("/v1/hadiths/urns", methods=["GET"])
+def api_hadiths_by_urns():
+    # Enforce: urns must appear only once (no ?urns=1&urns=2)
+    if len(request.args.getlist("urns")) != 1:
+        abort(
+            400,
+            "Query parameter 'urns' must be provided exactly once. Example: ?urns=305,306",
+        )
+
+    urns_param = request.args.get("urns", "").strip()
+    if not urns_param:
+        abort(400, "Query parameter 'urns' is required. Example: ?urns=305,306")
+
+    # Parse comma-separated URNs
+    parts = [p.strip() for p in urns_param.split(",") if p.strip()]
+    if not parts:
+        abort(400, "Query parameter 'urns' is required. Example: ?urns=305,306")
+
+    urns = []
+    invalid = []
+    seen = set()
+
+    for p in parts:
+        try:
+            u = int(p)
+        except (TypeError, ValueError):
+            invalid.append(p)
+            continue
+        if u not in seen:
+            seen.add(u)
+            urns.append(u)
+
+    if invalid:
+        abort(400, f"Invalid URN(s): {', '.join(map(str, invalid))}")
+
+    MAX_URNS = 100
+    if len(urns) > MAX_URNS:
+        abort(400, f"Too many URNs (max {MAX_URNS}).")
+
+    results = (
+        Hadith.query.filter(
+            or_(Hadith.englishURN.in_(urns), Hadith.arabicURN.in_(urns))
+        )
+        .all()
+    )
+
+    by_eng = {h.englishURN: h for h in results}
+    by_ar = {h.arabicURN: h for h in results}
+
+    data = []
+    missing = []
+    for u in urns:
+        h = by_eng.get(u) or by_ar.get(u)
+        if h is None:
+            missing.append(u)
+        else:
+            data.append(h.serialize())
+
+    return jsonify({"count": len(data), "missing": missing, "data": data})
 
 
 @app.route("/v1/hadiths/random", methods=["GET"])
