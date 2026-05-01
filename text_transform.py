@@ -63,11 +63,16 @@ def fix_hyperlinks(text):
     return text
 
 
+def strip_shortcodes(text):
+    return re.sub(r"""\[/?[a-z]+(?:\s+[a-z]+=(?:"[^"]*"|'[^']*'))*\]""", "", text)
+
+
 def cleanup_text(text):
     if not text:
         return text
     text = re.sub(r"\n+", "\n", text)
     text = re.sub(r" +", " ", text)
+    text = strip_shortcodes(text)
     text = fix_html(text)
     text = fix_hyperlinks(text)
     text = text.strip()
@@ -87,6 +92,7 @@ def cleanup_chapter_title(text):
         return text
     text = re.sub(r"\n+", "\n", text)
     text = re.sub(r" +", " ", text)
+    text = strip_shortcodes(text)
     text = fix_html(text, remove_wrapper=True)
     text = fix_hyperlinks(text)
     text = text.strip()
