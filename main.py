@@ -1,6 +1,6 @@
 import functools
 from flask import Flask, jsonify, request, abort
-from sqlalchemy import func, or_
+from sqlalchemy import and_, func, or_
 from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
@@ -193,6 +193,79 @@ def api_hadiths_by_urns():
         h = by_eng.get(u) or by_ar.get(u)
         if h is None:
             missing.append(u)
+        else:
+            data.append(h.serialize())
+
+    return jsonify({"count": len(data), "missing": missing, "data": data})
+
+
+@app.route("/v1/hadiths/refs", methods=["GET"])
+def api_hadiths_by_refs():
+    # Enforce: refs must appear only once (no ?refs=a&refs=b)
+    if len(request.args.getlist("refs")) != 1:
+        abort(
+            400,
+            "Query parameter 'refs' must be provided exactly once. Example: ?refs=bukhari:1,bukhari:2",
+        )
+
+    refs_param = request.args.get("refs", "").strip()
+    if not refs_param:
+        abort(400, "Query parameter 'refs' is required. Example: ?refs=bukhari:1,bukhari:2")
+
+    # Parse comma-separated collection:hadithNumber refs
+    parts = [p.strip() for p in refs_param.split(",") if p.strip()]
+    if not parts:
+        abort(400, "Query parameter 'refs' is required. Example: ?refs=bukhari:1,bukhari:2")
+
+    refs = []
+    invalid = []
+    seen = set()
+
+    for p in parts:
+        if ":" not in p:
+            invalid.append(p)
+            continue
+
+        collection, hadith_number = [x.strip() for x in p.split(":", 1)]
+        if not collection or not hadith_number:
+            invalid.append(p)
+            continue
+
+        ref = (collection, hadith_number)
+        if ref not in seen:
+            seen.add(ref)
+            refs.append(ref)
+
+    if invalid:
+        abort(400, f"Invalid ref(s): {', '.join(invalid)}")
+
+    MAX_REFS = 100
+    if len(refs) > MAX_REFS:
+        abort(400, f"Too many refs (max {MAX_REFS}).")
+
+    results = (
+        Hadith.query.filter(
+            or_(
+                *[
+                    and_(
+                        Hadith.collection == collection,
+                        Hadith.hadithNumber == hadith_number,
+                    )
+                    for collection, hadith_number in refs
+                ]
+            )
+        )
+        .all()
+    )
+
+    by_ref = {(h.collection, h.hadithNumber): h for h in results}
+
+    data = []
+    missing = []
+    for collection, hadith_number in refs:
+        h = by_ref.get((collection, hadith_number))
+        if h is None:
+            missing.append(f"{collection}:{hadith_number}")
         else:
             data.append(h.serialize())
 
