@@ -1,4 +1,5 @@
 import functools
+import math
 from flask import Flask, jsonify, request, abort
 from sqlalchemy import and_, func, or_
 from werkzeug.exceptions import HTTPException
@@ -28,6 +29,16 @@ def jsonify_http_error(error):
     return jsonify(response), error.code
 
 
+MAX_PARAM_ECHO_LEN = 50
+
+
+def _truncate_param(value):
+    value = str(value)
+    if len(value) > MAX_PARAM_ECHO_LEN:
+        return value[:MAX_PARAM_ECHO_LEN] + "..."
+    return value
+
+
 def paginate_results(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
@@ -37,12 +48,17 @@ def paginate_results(f):
         try:
             limit = int(limit_param)
         except (TypeError, ValueError):
-            abort(400, f"Invalid 'limit' query parameter: '{limit_param}' is not an integer.")
+            abort(400, f"Invalid 'limit' query parameter: '{_truncate_param(limit_param)}' is not an integer.")
 
         try:
             page = int(page_param)
         except (TypeError, ValueError):
-            abort(400, f"Invalid 'page' query parameter: '{page_param}' is not an integer.")
+            abort(400, f"Invalid 'page' query parameter: '{_truncate_param(page_param)}' is not an integer.")
+
+        if limit < 1:
+            abort(400, "Invalid 'limit' query parameter: must be >= 1.")
+        if page < 1:
+            abort(400, "Invalid 'page' query parameter: must be >= 1.")
 
         queryset = f(*args, **kwargs).paginate(page=page, per_page=limit, max_per_page=100)
         result = {
@@ -140,9 +156,12 @@ def api_hadiths():
     chapter_id = request.args.get("chapterId")
     if chapter_id:
         try:
-            chapter_id = float(chapter_id)
-        except ValueError:
-            abort(400, f"Invalid 'chapterId' query parameter: '{chapter_id}' is not a number.")
+            parsed_chapter_id = float(chapter_id)
+        except (TypeError, ValueError):
+            abort(400, f"Invalid 'chapterId' query parameter: '{_truncate_param(chapter_id)}' is not a number.")
+        if not math.isfinite(parsed_chapter_id):
+            abort(400, f"Invalid 'chapterId' query parameter: '{_truncate_param(chapter_id)}' is not a finite number.")
+        chapter_id = parsed_chapter_id
         query = query.filter_by(babID=chapter_id)
 
     hadith_number = request.args.get("hadithNumber")
