@@ -11,8 +11,14 @@ from models import HadithCollection, Book, Chapter, Hadith
 
 @app.before_request
 def verify_secret():
-    if not app.debug and request.headers.get("x-aws-secret") != app.config["AWS_SECRET"]:
-        abort(401)
+    if app.debug:
+        return
+
+    secret = request.headers.get("x-aws-secret")
+    if secret is None:
+        abort(401, "Missing 'x-aws-secret' header.")
+    if secret != app.config["AWS_SECRET"]:
+        abort(401, "Invalid 'x-aws-secret' header value.")
 
 
 @app.errorhandler(HTTPException)
@@ -25,8 +31,18 @@ def jsonify_http_error(error):
 def paginate_results(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        limit = int(request.args.get("limit", 50))
-        page = int(request.args.get("page", 1))
+        limit_param = request.args.get("limit", 50)
+        page_param = request.args.get("page", 1)
+
+        try:
+            limit = int(limit_param)
+        except (TypeError, ValueError):
+            abort(400, f"Invalid 'limit' query parameter: '{limit_param}' is not an integer.")
+
+        try:
+            page = int(page_param)
+        except (TypeError, ValueError):
+            abort(400, f"Invalid 'page' query parameter: '{page_param}' is not an integer.")
 
         queryset = f(*args, **kwargs).paginate(page=page, per_page=limit, max_per_page=100)
         result = {
@@ -123,7 +139,11 @@ def api_hadiths():
 
     chapter_id = request.args.get("chapterId")
     if chapter_id:
-        query = query.filter_by(babID=float(chapter_id))
+        try:
+            chapter_id = float(chapter_id)
+        except ValueError:
+            abort(400, f"Invalid 'chapterId' query parameter: '{chapter_id}' is not a number.")
+        query = query.filter_by(babID=chapter_id)
 
     hadith_number = request.args.get("hadithNumber")
     if hadith_number:
