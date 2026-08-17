@@ -37,7 +37,7 @@ $ curl http://localhost:5000
 
 ## Deployment
 
-Configuration files are located at `env.local` and `uwsgi.ini`.
+Configuration files are located at `.env.local` and `uwsgi.ini`.
 
 A production ready uWSGI daemon (uwsgi socket exposed on port 5001) can be started with:
 
