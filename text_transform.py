@@ -7,6 +7,8 @@ def fix_html(text, remove_wrapper=False):
     """Fix invalid html, remove unnecessary attribs, tags and whitespace"""
     text = text.strip()
     text = text.replace("\r", "")  # remove \r as lxml escapes it
+    if not text:
+        return ""
     doc = lxml.html.document_fromstring(text)
 
     anchors = doc.body.findall(".//a")
