@@ -378,8 +378,8 @@ def api_hadiths_by_refs():
 @app.route("/v1/hadiths/random", methods=["GET"])
 @single_resource
 def api_hadiths_random():
-    # TODO Make this configurable instead of hardcoding
-    return Hadith.query.filter_by(collection="riyadussalihin").order_by(func.rand())
+    collection = request.args.get("collection", "riyadussalihin")
+    return Hadith.query.filter_by(collection=collection).order_by(func.rand())
 
 
 if __name__ == "__main__":

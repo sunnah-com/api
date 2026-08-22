@@ -178,7 +178,7 @@ paths:
             type: string
         - in: path
           name: chapterId
-          description: Number of the book
+          description: ID of the chapter
           required: true
           schema:
             type: number
