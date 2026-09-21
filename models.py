@@ -113,11 +113,11 @@ class Hadith(db.Model):
         except ValueError:
             return [{"graded_by": getattr(self.rel_collection, field_name), "grade": grade_val}]
 
-    def serialize(self):
+    def serialize(self, collection=None):
         grades = {"en": self.get_grade("englishgrade1"), "ar": self.get_grade("arabicgrade1")}
 
         return {
-            "collection": self.collection,
+            "collection": collection or self.collection,
             "bookNumber": self.bookNumber,
             "chapterId": str(self.babID),
             "hadithNumber": self.hadithNumber,
