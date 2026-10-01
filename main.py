@@ -1,4 +1,5 @@
 import functools
+import math
 from flask import Flask, jsonify, request, abort
 from sqlalchemy import and_, func, or_
 from werkzeug.exceptions import HTTPException
@@ -78,8 +79,14 @@ def ref_match(results, collection, hadith_number):
 
 @app.before_request
 def verify_secret():
-    if not app.debug and request.headers.get("x-aws-secret") != app.config["AWS_SECRET"]:
-        abort(401)
+    if app.debug:
+        return
+
+    secret = request.headers.get("x-aws-secret")
+    if secret is None:
+        abort(401, "Missing 'x-aws-secret' header.")
+    if secret != app.config["AWS_SECRET"]:
+        abort(401, "Invalid 'x-aws-secret' header value.")
 
 
 @app.errorhandler(HTTPException)
@@ -87,6 +94,16 @@ def jsonify_http_error(error):
     response = {"error": {"details": error.description, "code": error.code}}
 
     return jsonify(response), error.code
+
+
+MAX_PARAM_ECHO_LEN = 50
+
+
+def _truncate_param(value):
+    value = str(value)
+    if len(value) > MAX_PARAM_ECHO_LEN:
+        return value[:MAX_PARAM_ECHO_LEN] + "..."
+    return value
 
 
 def unpack_query(result):
@@ -97,8 +114,23 @@ def unpack_query(result):
 def paginate_results(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        limit = int(request.args.get("limit", 50))
-        page = int(request.args.get("page", 1))
+        limit_param = request.args.get("limit", 50)
+        page_param = request.args.get("page", 1)
+
+        try:
+            limit = int(limit_param)
+        except (TypeError, ValueError):
+            abort(400, f"Invalid 'limit' query parameter: '{_truncate_param(limit_param)}' is not an integer.")
+
+        try:
+            page = int(page_param)
+        except (TypeError, ValueError):
+            abort(400, f"Invalid 'page' query parameter: '{_truncate_param(page_param)}' is not an integer.")
+
+        if limit < 1:
+            abort(400, "Invalid 'limit' query parameter: must be >= 1.")
+        if page < 1:
+            abort(400, "Invalid 'page' query parameter: must be >= 1.")
 
         query, opts = unpack_query(f(*args, **kwargs))
         queryset = query.paginate(page=page, per_page=limit, max_per_page=100)
@@ -241,7 +273,14 @@ def api_hadiths():
 
     chapter_id = request.args.get("chapterId")
     if chapter_id:
-        query = query.filter_by(babID=float(chapter_id))
+        try:
+            parsed_chapter_id = float(chapter_id)
+        except (TypeError, ValueError):
+            abort(400, f"Invalid 'chapterId' query parameter: '{_truncate_param(chapter_id)}' is not a number.")
+        if not math.isfinite(parsed_chapter_id):
+            abort(400, f"Invalid 'chapterId' query parameter: '{_truncate_param(chapter_id)}' is not a finite number.")
+        chapter_id = parsed_chapter_id
+        query = query.filter_by(babID=chapter_id)
 
     hadith_number = request.args.get("hadithNumber")
     if hadith_number:
