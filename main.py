@@ -3,6 +3,8 @@ from flask import Flask, jsonify, request, abort
 from sqlalchemy import and_, func, or_
 from werkzeug.exceptions import HTTPException
 
+from hadith_number import matches_hadith_number
+
 app = Flask(__name__)
 app.config.from_object("config.Config")
 
@@ -74,6 +76,18 @@ def ref_match(results, collection, hadith_number):
             return h
 
     return None
+
+
+def filter_hadith_number(query, hadith_number):
+    """Match `hadith_number` exactly, else as one part of a combined number like "6924, 6925"."""
+    exact = query.filter(Hadith.hadithNumber == hadith_number)
+
+    if exact.first() is not None:
+        return exact
+
+    candidates = query.filter(Hadith.hadithNumber.contains(hadith_number, autoescape=True)).with_entities(Hadith.arabicURN, Hadith.hadithNumber)
+    urns = [urn for urn, stored in candidates if matches_hadith_number(stored, hadith_number)]
+    return query.filter(Hadith.arabicURN.in_(urns))
 
 
 @app.before_request
@@ -198,12 +212,12 @@ def api_collection_book_hadiths(collection_name, bookNumber):
 def api_collection_hadith(collection_name, hadithNumber):
     collection, book_number = resolve_collection(collection_name)
     # `forty` numbers each of its books from 1, so order to keep the pick stable
-    query = Hadith.query.filter_by(collection=collection, hadithNumber=hadithNumber).order_by(Hadith.englishURN)
+    query = Hadith.query.filter_by(collection=collection).order_by(Hadith.englishURN)
 
     if book_number is not None:
         query = query.filter_by(bookNumber=book_number)
 
-    return query, serialize_as(collection_name)
+    return filter_hadith_number(query, hadithNumber), serialize_as(collection_name)
 
 
 @app.route("/v1/collections/<string:collection_name>/books/<string:bookNumber>/chapters", methods=["GET"])
@@ -245,7 +259,7 @@ def api_hadiths():
 
     hadith_number = request.args.get("hadithNumber")
     if hadith_number:
-        query = query.filter_by(hadithNumber=hadith_number)
+        query = filter_hadith_number(query, hadith_number)
 
     # Order by URN for consistent results
     return query.order_by(Hadith.englishURN), serialize_as(collection)
