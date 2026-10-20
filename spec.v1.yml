@@ -47,6 +47,8 @@ paths:
                         items:
                           $ref: "#/components/schemas/Collection"
                   - $ref: "#/components/schemas/PaginatedResponse"
+        "400":
+          description: Bad request (invalid 'limit' or 'page' query parameter)
       parameters:
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/page"
@@ -86,6 +88,8 @@ paths:
                         items:
                           $ref: "#/components/schemas/Book"
                   - $ref: "#/components/schemas/PaginatedResponse"
+        "400":
+          description: Bad request (invalid 'limit' or 'page' query parameter)
       parameters:
         - in: path
           name: collectionName
@@ -137,6 +141,8 @@ paths:
                         items:
                           $ref: "#/components/schemas/Chapter"
                   - $ref: "#/components/schemas/PaginatedResponse"
+        "400":
+          description: Bad request (invalid 'limit' or 'page' query parameter)
       parameters:
         - in: path
           name: collectionName
@@ -201,6 +207,8 @@ paths:
                         items:
                           $ref: "#/components/schemas/Hadith"
                   - $ref: "#/components/schemas/PaginatedResponse"
+        "400":
+          description: Bad request (invalid 'limit' or 'page' query parameter)
       parameters:
         - in: path
           name: collectionName
@@ -258,6 +266,8 @@ paths:
                         items:
                           $ref: "#/components/schemas/Hadith"
                   - $ref: "#/components/schemas/PaginatedResponse"
+        "400":
+          description: Bad request (invalid 'limit', 'page', or 'chapterId' query parameter)
       parameters:
         - in: query
           name: collection
