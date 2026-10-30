@@ -23,7 +23,7 @@ nodeenv==1.4.0
 pathspec==0.12.1
 pycodestyle==2.6.0
 pyflakes==2.2.0
-pylint==2.5.2
+pylint==4.0.9
 PyMySQL==1.1.1
 python-dotenv==0.13.0
 PyYAML==6.0.2
